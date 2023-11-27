@@ -39,12 +39,12 @@ class QuickDirFile(ft.UserControl):
         self.shortcutDirFileBtnList = []
 
         for index, row in df.iterrows():
-            print(row[0], row[1])
+            print(row.iloc[0], row.iloc[1])
             btnItem = ElevatedButton(
-                text=row[0],
+                text=row.iloc[0],
                 col={"sm": 4},
                 # 必须复制一份dirFilePath=row[1]
-                on_click=lambda event, dirFilePath=row[1]: self.openDirFile(event, dirFilePath),
+                on_click=lambda event, dirFilePath=row.iloc[1]: self.openDirFile(event, dirFilePath),
             )
             self.shortcutDirFileBtnList.append(btnItem)
 

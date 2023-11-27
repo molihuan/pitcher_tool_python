@@ -1,5 +1,7 @@
+
 from flet_core import UserControl, Page, Container, Column, ElevatedButton, ScrollMode, MainAxisAlignment, AppBar, Text, \
-    colors, alignment, TextField, Row
+    colors, alignment, TextField, Row,ListTile,ControlEvent
+from service.dao.data_manager import DataManager
 
 from service.http.http import HttpUtils
 from service.utils.common_utils import CommonUtils
@@ -10,8 +12,13 @@ class QuickFacebookAccountPage(UserControl):
     def __init__(self, parent: Page):
         super().__init__()
         self.parent = parent
+    def initData(self):
+        # self.selectedGroup = DataManager.getSelectedGroup(self.page)
+        pass
 
     def build(self):
+        self.initData()
+
         self.rawAccountMsgTF = TextField(
             hint_text="请粘贴在这里",
             multiline=True,
@@ -30,7 +37,7 @@ class QuickFacebookAccountPage(UserControl):
                 self.rawAccountMsgTF,
                 Row([
                     ElevatedButton(text="选择分组", on_click=self.selectGroup),
-                    Text("当前分组为"),
+                    Text(f"当前分组为："),
                 ]),
                 Row([
                     self.groupIdTF
@@ -52,13 +59,33 @@ class QuickFacebookAccountPage(UserControl):
         if response is None:
             print("获取分组信息失败")
             return
-        print(response)
-        # CommonUtils.showBottomSheet(self.page, [
-        #     
-        # ])
+
+        groupList = response['data']['list']
+        print(groupList)
+        groupListView = []
+        for groupItem in groupList:
+            groupListView.append(
+                ListTile(
+                    title= Text(groupItem['group_name']),
+                    data=groupItem['group_id'],
+                    on_click=lambda event,gi = groupItem : self.saveGroupMsg(event,gi)
+                )  
+            )
+            
+        CommonUtils.showBottomSheet(self.page, groupListView)
+    
+    def saveGroupMsg(self,event:ControlEvent,groupMsg):
+        print(event)
+
+        DataManager.setSelectedGroup(self.page,groupMsg)
+        CommonUtils.closeBottomSheet(self.page,event.control)
+        print('保存成功')
         pass
 
     def handleCreateAccount(self, event):
+        value = DataManager.getSelectedGroup(self.page)
+        print(value)
+
         rawText = self.rawAccountMsgTF.value
         groupId = self.groupIdTF.value
         if len(rawText.strip()) == 0:

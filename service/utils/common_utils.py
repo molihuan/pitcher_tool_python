@@ -55,6 +55,7 @@ class CommonUtils():
         page.overlay.append(bs)
         bs.open = True
         page.update()
+        return bs
 
     @staticmethod
     def closeBottomSheet(page: ft.Page, bs: ft.BottomSheet):

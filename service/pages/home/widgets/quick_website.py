@@ -38,12 +38,12 @@ class QuickWebsite(ft.UserControl):
         self.shortcutWebsiteBtnList = []
 
         for index, row in df.iterrows():
-            print(row[0], row[1])
+            print(row.iloc[0], row.iloc[1])
             btnItem = ElevatedButton(
-                text=row[0],
+                text=row.iloc[0],
                 col={"sm": 4},
                 # 必须复制一份dirFilePath=row[1]
-                on_click=lambda event, url=row[1]: self.openWebsite(event, url),
+                on_click=lambda event, url=row.iloc[1]: self.openWebsite(event, url),
             )
             self.shortcutWebsiteBtnList.append(btnItem)
 
