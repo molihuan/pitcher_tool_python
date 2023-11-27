@@ -1,4 +1,7 @@
+from typing import List
+
 import flet as ft
+from flet_core import MainAxisAlignment, Control
 
 
 class CommonUtils():
@@ -36,17 +39,16 @@ class CommonUtils():
         page.update()
 
     @staticmethod
-    def showBottomSheet(page: ft.Page, title='提示', ):
+    def showBottomSheet(page: ft.Page, widgetList: List[Control], title='提示', ):
         bs = ft.BottomSheet(
             ft.Container(
                 ft.Column(
-                    [
-                        ft.Text(title),
-                        ft.ElevatedButton("关闭", on_click=lambda p: CommonUtils.closeBottomSheet(page, bs)),
-                    ],
+                    controls=widgetList,
                     tight=True,
+                    alignment=MainAxisAlignment.CENTER
                 ),
-                
+                padding=10,
+                width=page.width,
             ),
             open=True,
         )

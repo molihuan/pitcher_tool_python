@@ -1,11 +1,14 @@
+import re
+
 from service.models.facebook_account_msg import FacebookAccountMsg
 
 
 class StrUtils():
     @staticmethod
     def getFacebookAccountMsg(msg: str) -> FacebookAccountMsg:
-        # 处理回车键
-        msg = msg.replace('\n', '')
+        print(msg)
+        # 处理回车键空格等
+        msg = re.sub(r"\s+", "", msg)
 
         msg_list = msg.split('|')
         if len(msg_list) < 5:
