@@ -26,10 +26,12 @@ class QuickFacebookAccountPage(UserControl):
             max_lines=10,
         )
 
-        self.groupIdTF = TextField(
+        self.browserNameTF = TextField(
             hint_text="浏览器名称(可不填,默认为空)",
             width=self.parent.width / 2
         )
+
+        self.showGroupText:Text = Text("当前分组为：")
 
         return Container(
             content=Column([
@@ -37,10 +39,10 @@ class QuickFacebookAccountPage(UserControl):
                 self.rawAccountMsgTF,
                 Row([
                     ElevatedButton(text="选择分组", on_click=self.selectGroup),
-                    Text(f"当前分组为："),
+                    self.showGroupText,
                 ]),
                 Row([
-                    self.groupIdTF
+                    self.browserNameTF
                 ]),
 
                 ElevatedButton(text="创建并打开",
@@ -73,12 +75,15 @@ class QuickFacebookAccountPage(UserControl):
             )
             
         CommonUtils.showBottomSheet(self.page, groupListView)
-    
+    # 保存分组信息
     def saveGroupMsg(self,event:ControlEvent,groupMsg):
-        print(event)
-
-        DataManager.setSelectedGroup(self.page,groupMsg)
-        CommonUtils.closeBottomSheet(self.page,event.control)
+        saveResult = DataManager.setSelectedGroup(self.page,groupMsg)
+        if not saveResult:
+            print('保存失败')
+            return
+        # CommonUtils.closeBottomSheet(self.page,event.control)
+        self.showGroupText.value = "当前分组为:"+groupMsg['group_name']
+        self.update()
         print('保存成功')
         pass
 
@@ -87,7 +92,7 @@ class QuickFacebookAccountPage(UserControl):
         print(value)
 
         rawText = self.rawAccountMsgTF.value
-        groupId = self.groupIdTF.value
+        groupId = self.browserNameTF.value
         if len(rawText.strip()) == 0:
             CommonUtils.showSnack(self.page, "二解信息为空")
             return
