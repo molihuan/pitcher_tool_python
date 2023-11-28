@@ -7,3 +7,5 @@ excel解析
 pandas 2.0.3
 
 openpyxl
+
+requests-mock

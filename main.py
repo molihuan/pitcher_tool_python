@@ -1,5 +1,6 @@
 import flet as ft
 
+from service.http.http import HttpUtils
 from service.pages.home.view import HomePage
 from service.routes.app_routes import AppRoutes
 
@@ -7,6 +8,8 @@ from service.routes.app_routes import AppRoutes
 def main(page: ft.Page):
     page.title = "超级投手工具"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+
+    HttpUtils.setDebug(True)
 
     # 路由配置
     appRoutes = AppRoutes(page)
