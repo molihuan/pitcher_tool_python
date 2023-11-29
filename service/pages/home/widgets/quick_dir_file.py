@@ -1,10 +1,8 @@
 import os
 
-import chardet
 import flet as ft
-import pandas as pd
 from flet_core import ElevatedButton, ResponsiveRow, Text, Row, ListView, IconButton
-from pandas import DataFrame
+from openpyxl import load_workbook
 
 from service.utils.common_utils import CommonUtils
 from service.utils.file_utils import FileUtils
@@ -34,17 +32,16 @@ class QuickDirFile(ft.UserControl):
         ])
 
     def initData(self):
-        # 读取Excel文件
-        df: DataFrame = pd.read_excel(self.configExcelPath)
         self.shortcutDirFileBtnList = []
-
-        for index, row in df.iterrows():
-            print(row.iloc[0], row.iloc[1])
+        wb = load_workbook(filename=self.configExcelPath)
+        ws = wb.active
+        for cells in ws.iter_rows(min_row=2):  # 从第二行开始遍历
+            print(cells[0].value, cells[1].value)
             btnItem = ElevatedButton(
-                text=row.iloc[0],
+                text=cells[0].value,
                 col={"sm": 4},
                 # 必须复制一份dirFilePath=row[1]
-                on_click=lambda event, dirFilePath=row.iloc[1]: self.openDirFile(event, dirFilePath),
+                on_click=lambda event, dirFilePath=cells[1].value: self.openDirFile(event, dirFilePath),
             )
             self.shortcutDirFileBtnList.append(btnItem)
 
