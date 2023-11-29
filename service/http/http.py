@@ -2,10 +2,8 @@ import json
 
 import requests
 
-# 创建一个 Session 对象，并设置基地址
-import requests_mock
-
-from service.http.api import URL_QUERY_PACKETS, URL_START_BROWSER, URL_CREATE_USER
+from service.http.api import URL_QUERY_PACKETS, URL_START_BROWSER, URL_CREATE_USER, URL_STATUS, URL_STOP_BROWSER, \
+    URL_ACTIVE_BROWSER
 from service.models.facebook_account_msg import FacebookAccountMsg
 
 
@@ -15,6 +13,26 @@ class HttpUtils:
     @classmethod
     def setDebug(cls, v):
         cls._debug = v
+
+    @staticmethod
+    def getApiStatus():
+        if HttpUtils._debug:
+            json_str = '''
+            {
+              "code":0,
+              "msg":"success"
+            }
+            '''
+            # 解析JSON字符串
+            json_obj = json.loads(json_str)
+            return json_obj
+        response = requests.get(URL_STATUS)
+        data = response.json()
+        if response.status_code == 200:
+            return data
+        else:
+            print("getApiStatus err")
+            return None
 
     # 查询分组
     @staticmethod
@@ -65,7 +83,7 @@ class HttpUtils:
                   "puppeteer":"ws://127.0.0.1:xxxx/devtools/browser/xxxxxx"   
                 },
                 "debug_port": "xxxx", 
-                "webdriver": "C:\\xxxx\\chromedriver.exe" 
+                "webdriver": "C:/xxxx/chromedriver.exe" 
               },
               "msg":"success"
             }
@@ -81,6 +99,59 @@ class HttpUtils:
             print("openBrowser err")
             return None
 
+    # 关闭浏览器
+    @staticmethod
+    def closeBrowser(id):
+        if HttpUtils._debug:
+            json_str = '''
+            {
+              "code":0,
+              "data":{},
+              "msg":"success"
+            }
+            '''
+            # 解析JSON字符串
+            json_obj = json.loads(json_str)
+            return json_obj
+        response = requests.get(URL_STOP_BROWSER, params={'user_id': id})
+        data = response.json()
+        if response.status_code == 200:
+            return data
+        else:
+            print("closeBrowser err")
+            return None
+
+    # 启动状态
+    @staticmethod
+    def startupStatus(id):
+        if HttpUtils._debug:
+            # 浏览器已打开运行中 "Active" ，未打开则是 "Inactive"
+            # 浏览器debug接口，可用于selenium自动化
+            # 浏览器debug接口，可用于puppeteer自动化
+            json_str = '''
+                {
+                  "code":0,
+                  "data":{
+                    "status": "Active",   
+                    "ws":{
+                      "selenium":"127.0.0.1:xxxx",
+                      "puppeteer":"ws://127.0.0.1:xxxx/devtools/browser/xxxxxx"
+                    }
+                  },
+                  "msg":"success"
+                }
+            '''
+            # 解析JSON字符串
+            json_obj = json.loads(json_str)
+            return json_obj
+        response = requests.get(URL_ACTIVE_BROWSER, params={'user_id': id})
+        data = response.json()
+        if response.status_code == 200:
+            return data
+        else:
+            print("closeBrowser err")
+            return None
+
     # 创建facebook账户
     @staticmethod
     def creatFacebookUser(facebookMsg: FacebookAccountMsg, groupId, name='', ):
@@ -90,7 +161,7 @@ class HttpUtils:
                   "code": 0,
                   "data": {
                     "id":"xxxxxxx"
-                  }      
+                  },
                   "msg": "Success"
                 }
             '''

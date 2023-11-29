@@ -8,4 +8,5 @@ class DataManager():
 
     @staticmethod
     def getGroupMsg(page: Page):
-        return page.client_storage.get("GroupMsg")
+        groupMsgDirt = page.client_storage.get("GroupMsg")
+        return groupMsgDirt

@@ -6,11 +6,11 @@ from flet_core import MainAxisAlignment, Control
 
 class CommonUtils():
     @staticmethod
-    def showSnack(page: ft.Page, text: str):
+    def showSnack(page: ft.Page, text: str, actionText='提示'):
         if page.snack_bar is None:
             page.snack_bar = ft.SnackBar(
                 content=ft.Text("Hello, world!"),
-                action="错误!",
+                action=actionText,
             )
         page.snack_bar.content = ft.Text(text)
         page.snack_bar.open = True

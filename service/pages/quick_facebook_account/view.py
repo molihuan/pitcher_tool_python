@@ -1,5 +1,5 @@
 from flet_core import UserControl, Page, Container, Column, ElevatedButton, ScrollMode, MainAxisAlignment, AppBar, Text, \
-    colors, alignment, TextField, Row, ListTile, ControlEvent
+    colors, alignment, TextField, Row, ListTile, ControlEvent, Ref
 from service.dao.data_manager import DataManager
 
 from service.http.http import HttpUtils
@@ -13,38 +13,43 @@ class QuickFacebookAccountPage(UserControl):
         super().__init__()
         self.parent = parent
 
+        self.rawAccountMsgTF = Ref[TextField]()
+        self.showGroupText = Ref[Text]()
+        self.browserNameTF = Ref[TextField]()
+
     def initData(self):
-        # self.selectedGroup = DataManager.getSelectedGroup(self.page)
-        tt = DataManager.getGroupMsg(self.page)
-        print(tt)
+        dataJson = DataManager.getGroupMsg(self.page)
+        if dataJson is None:
+            return
+        self.selectedGroupMsg = GroupMsg.from_json(dataJson)
+        self.showGroupText.current.value = self.selectedGroupMsg.group_name
+        self.update()
+
+    def did_mount(self):
+        self.initData()
+        pass
 
     def build(self):
-        # self.initData()
-
-        self.rawAccountMsgTF = TextField(
-            hint_text="请粘贴在这里",
-            multiline=True,
-            min_lines=5,
-            max_lines=10,
-        )
-
-        self.showGroupText: Text = Text("null")
-
-        self.browserNameTF = TextField(
-            hint_text="浏览器名称(可不填,默认为空)",
-            width=self.parent.width / 2
-        )
-
         return Container(
             content=Column([
                 Text("请粘贴完整的二解信息", size=20),
-                self.rawAccountMsgTF,
+                TextField(
+                    ref=self.rawAccountMsgTF,
+                    hint_text="请粘贴在这里",
+                    multiline=True,
+                    min_lines=5,
+                    max_lines=10,
+                ),
                 Row([
                     ElevatedButton(text="选择分组", on_click=self.clcSelectGroup),
                     Text("当前分组为:"),
-                    self.showGroupText,
+                    Text(ref=self.showGroupText, value=""),
                 ]),
-                self.browserNameTF,
+                TextField(
+                    ref=self.browserNameTF,
+                    hint_text="浏览器名称(可不填,默认为空)",
+                    width=self.parent.width / 2
+                ),
                 ElevatedButton(text="创建并打开",
                                on_click=self.handleCreateAccount),
             ],
@@ -57,7 +62,8 @@ class QuickFacebookAccountPage(UserControl):
 
     # 点击选择分组按钮
     def clcSelectGroup(self, event):
-        response = HttpUtils.queryPackets()  # 调用queryPackets方法
+        # 查询分组信息
+        response = HttpUtils.queryPackets()
         if response is None:
             print("获取分组信息失败")
             return
@@ -81,21 +87,21 @@ class QuickFacebookAccountPage(UserControl):
     def clcGroupItem(self, event: ControlEvent, groupMsg: GroupMsg):
         CommonUtils.closeBottomSheet(self.page, self.bs)
         # 持久化
-        saveResult = DataManager.setGroupMsg(self.page, groupMsg)
+        saveResult = DataManager.setGroupMsg(self.page, groupMsg.to_json())
         self.selectedGroupMsg = groupMsg
         if not saveResult:
             print('保存失败,请联系开发者解决')
             return
-        self.showGroupText.value = groupMsg.group_name
+        self.showGroupText.current.value = groupMsg.group_name
         self.update()
         print('保存成功')
         pass
 
     def handleCreateAccount(self, event):
 
-        rawText = self.rawAccountMsgTF.value
+        rawText = self.rawAccountMsgTF.current.value
         groupId = self.selectedGroupMsg.group_id
-        browserName = self.browserNameTF.value
+        browserName = self.browserNameTF.current.value
 
         if len(rawText.strip()) == 0:
             CommonUtils.showSnack(self.page, "二解信息为空")
@@ -105,8 +111,17 @@ class QuickFacebookAccountPage(UserControl):
             return
         facebookMsg = StrUtils.getFacebookAccountMsg(rawText)
         print(facebookMsg)
-        creatResult = HttpUtils.creatFacebookUser(facebookMsg, groupId)
-        accountId = creatResult['data']['id']
+        createResult = HttpUtils.creatFacebookUser(facebookMsg, groupId, browserName)
+        if createResult['code'] != 0:
+            CommonUtils.showSnack(self.page, "创建账号失败,请检查二解信息是否完整。或联系开发者")
+            return
+        CommonUtils.showSnack(self.page, "创建账号成功!")
+        accountId = createResult['data']['id']
         print(accountId)
-        HttpUtils.openBrowser(accountId)
+        openResult = HttpUtils.openBrowser(accountId)
+        if openResult['code'] != 0:
+            CommonUtils.showSnack(self.page, "打开浏览器失败,请联系开发者")
+            return
+        CommonUtils.showSnack(self.page, "正在使用吃奶的力气打开浏览器,请稍后几秒...")
+        print(openResult)
         pass
