@@ -9,7 +9,7 @@ def main(page: ft.Page):
     page.title = "超级投手工具"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
 
-    HttpUtils.setDebug(True)
+    HttpUtils.setDebug(False)
 
     # 路由配置
     appRoutes = AppRoutes(page)
