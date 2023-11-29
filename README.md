@@ -1,6 +1,5 @@
-UI框架
+python:3.10.8
 
-flet 0.13.0
+UI框架:flet 0.13.0
 
-excel解析
-openpyxl
+excel解析:openpyxl

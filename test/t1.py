@@ -1,38 +1,28 @@
 import flet as ft
-from flet_core import MainAxisAlignment
 
 
 def main(page: ft.Page):
-    def bs_dismissed(e):
-        print("Dismissed!")
+    def check_item_clicked(e):
+        e.control.checked = not e.control.checked
+        page.update()
 
-    def show_bs(e):
-        bs.open = True
-        bs.update()
-
-    def close_bs(e):
-        bs.open = False
-        bs.update()
-
-    bs = ft.BottomSheet(
-        ft.Container(
-            ft.Column(
-                [
-                    ft.ListTile(
-                        title=ft.Text("莫利欢"),
-                        on_click=lambda _: print("666")
-                    ),
-                ],
-                tight=True,
+    page.appbar = ft.AppBar(
+        leading=ft.Icon(ft.icons.PALETTE),
+        leading_width=40,
+        title=ft.Text("超级投手工具"),
+        center_title=False,
+        bgcolor=ft.colors.SURFACE_VARIANT,
+        actions=[
+            ft.IconButton(ft.icons.WB_SUNNY_OUTLINED),
+            ft.PopupMenuButton(
+                items=[
+                    ft.PopupMenuItem(text="Item 1"),
+                    ft.PopupMenuItem(),  # divider
+                ]
             ),
-            padding=10,
-            width=page.width,
-        ),
-        open=True,
-        on_dismiss=bs_dismissed,
+        ],
     )
-    page.overlay.append(bs)
-    page.add(ft.ElevatedButton("Display bottom sheet", on_click=show_bs))
+    page.add(ft.Text("Body!"))
 
 
 ft.app(target=main)

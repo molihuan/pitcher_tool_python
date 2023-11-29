@@ -49,5 +49,6 @@ class QuickDirFile(ft.UserControl):
         print(event)
         if not FileUtils.exists(dirFilePath):
             CommonUtils.showSnack(self.page, "路径不存在,请检查Excel配置")
+            return
         FileUtils.open_file_or_folder(dirFilePath)
         pass

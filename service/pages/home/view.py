@@ -19,8 +19,8 @@ class HomePage(ft.UserControl):
                     AccountList(self.parent),
                     ft.ElevatedButton(text="测试按钮1",
                                       on_click=lambda _: CommonUtils.showAlertDialog(self.page, "你干嘛~~哎呦~~")),
-                    ft.ElevatedButton(text="测试按钮2",
-                                      on_click=lambda _: self.page.client_storage.clear()),
+                    # ft.ElevatedButton(text="重置设置",
+                    #                   on_click=lambda _: self.page.client_storage.clear()),
                     AutomationArea(self.parent),
                     QuickWebsite(self.parent),
                     QuickDirFile(self.parent),
@@ -28,5 +28,5 @@ class HomePage(ft.UserControl):
                 auto_scroll=True,
                 scroll=ft.ScrollMode.ALWAYS,
                 alignment=ft.MainAxisAlignment.CENTER
-            )
+            ),
         )
