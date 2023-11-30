@@ -91,7 +91,7 @@ class HttpUtils:
             # 解析JSON字符串
             json_obj = json.loads(json_str)
             return json_obj
-        response = requests.get(URL_START_BROWSER, params={'user_id': id, 'new_first_tab': 1})
+        response = requests.get(URL_START_BROWSER, params={'user_id': id})
         data = response.json()
         if response.status_code == 200:
             return data

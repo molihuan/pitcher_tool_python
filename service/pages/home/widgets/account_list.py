@@ -4,6 +4,7 @@ from flet_core import border, Text, DataColumn, DataRow, DataCell, Row, Elevated
 
 from service.dao.data_manager import DataManager
 from service.http.http import HttpUtils
+from service.models.browser_debug_config import BrowserDebugConfig
 from service.models.group_msg import GroupMsg
 from service.utils.common_utils import CommonUtils
 
@@ -48,7 +49,9 @@ class AccountList(UserControl):
                 ],
             )
             self.accountViewList.append(dataRow)
-
+        if len(self.accountViewList) == 0:
+            CommonUtils.showSnack(self.page, "最后一页了!我也是有底线的")
+            return
         self.dataTableRef.current.rows = self.accountViewList
         self.accountPageIndexShowText.current.value = self.accountPageIndex
         print("更新成功")
@@ -62,7 +65,10 @@ class AccountList(UserControl):
         if openResult['code'] != 0:
             CommonUtils.showSnack(self.page, "打开浏览器失败,请联系开发者")
             return
-        print(openResult)
+        bdc = BrowserDebugConfig(debugUrl=openResult['data']['ws']['selenium'],
+                                 debugPort=openResult['data']['debug_port'],
+                                 webDriver=openResult['data']['webdriver'])
+        print(bdc)
 
     def handleCloseAccount(self, event, user_id):
         print("关闭", user_id)
