@@ -3,7 +3,7 @@ import json
 import requests
 
 from service.http.api import URL_QUERY_PACKETS, URL_START_BROWSER, URL_CREATE_USER, URL_STATUS, URL_STOP_BROWSER, \
-    URL_ACTIVE_BROWSER
+    URL_ACTIVE_BROWSER, URL_ACCOUNT_LIST
 from service.models.facebook_account_msg import FacebookAccountMsg
 
 
@@ -44,11 +44,11 @@ class HttpUtils:
                 "data": {
                   "list": [
                     {
-                      "group_id": "100",     
+                      "group_id": "1",     
                       "group_name": "group1"  
                     },
                     {
-                      "group_id": "101",
+                      "group_id": "2",
                       "group_name": "group2"
                     }
                   ],
@@ -91,7 +91,7 @@ class HttpUtils:
             # 解析JSON字符串
             json_obj = json.loads(json_str)
             return json_obj
-        response = requests.get(URL_START_BROWSER, params={'user_id': id})
+        response = requests.get(URL_START_BROWSER, params={'user_id': id, 'new_first_tab': 1})
         data = response.json()
         if response.status_code == 200:
             return data
@@ -195,3 +195,61 @@ class HttpUtils:
         else:
             print("creatFacebookUser err")
             return None
+
+    @staticmethod
+    def getAccountList(group_id: str, page: int):
+        if HttpUtils._debug:
+            json_str = '''
+                {
+                  "code": 0,
+                  "data": {
+                    "list": [
+                    {
+                      "serial_number": "1",
+                      "user_id": "1",
+                      "name": "username1",
+                      "group_id": "1",
+                      "group_name": "XX",
+                      "domain_name": "facebook.com",
+                      "username": "121121151245121",
+                      "remark": "remark1",
+                      "sys_app_cate_id": "X",
+                      "created_time": "1612520997",
+                      "ip": "13.251.172.174",
+                      "ip_country": "sg",
+                      "password": "",
+                      "last_open_time": "1621333030"
+                    },{
+                      "serial_number": "2",
+                      "user_id": "2",
+                      "name": "username2",
+                      "group_id": "1",
+                      "group_name": "XX",
+                      "domain_name": "facebook.com",
+                      "username": "1245254254",
+                      "remark": "remark2",
+                      "sys_app_cate_id": "X",
+                      "created_time": "1612520998",
+                      "ip": "13.251.172.174",
+                      "ip_country": "sg",
+                      "password": "",
+                      "last_open_time": "1621333031"
+                    }],
+                    "page": 1,
+                    "page_size": 6
+                  },
+                  "msg": "Success"
+                }
+            '''
+            # 解析JSON字符串
+            json_obj = json.loads(json_str)
+            return json_obj
+
+        response = requests.get(URL_ACCOUNT_LIST, params={'page_size': 6, 'group_id': group_id, 'page': page})
+        data = response.json()
+        if response.status_code == 200:
+            return data
+        else:
+            print("getAccountList err")
+            return None
+        pass

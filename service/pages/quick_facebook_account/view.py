@@ -26,6 +26,7 @@ class QuickFacebookAccountPage(UserControl):
         self.update()
 
     def did_mount(self):
+        # 挂载后调用
         self.initData()
         pass
 
@@ -96,7 +97,7 @@ class QuickFacebookAccountPage(UserControl):
         self.update()
         print('保存成功')
         pass
-
+    
     def handleCreateAccount(self, event):
 
         rawText = self.rawAccountMsgTF.current.value
@@ -115,14 +116,14 @@ class QuickFacebookAccountPage(UserControl):
         if createResult['code'] != 0:
             CommonUtils.showSnack(self.page, "创建账号失败,请检查二解信息是否完整。或联系开发者")
             return
-        CommonUtils.showSnack(self.page, "创建账号成功!")
+        CommonUtils.showSnack(self.page, "创建账号成功!正在使用吃奶的力气打开浏览器,请稍后几秒...")
         accountId = createResult['data']['id']
         print(accountId)
         openResult = HttpUtils.openBrowser(accountId)
         if openResult['code'] != 0:
             CommonUtils.showSnack(self.page, "打开浏览器失败,请联系开发者")
             return
-        CommonUtils.showSnack(self.page, "正在使用吃奶的力气打开浏览器,请稍后几秒...")
         self.rawAccountMsgTF.current.value = ''
+        self.update()
         print(openResult)
         pass

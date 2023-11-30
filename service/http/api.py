@@ -9,3 +9,5 @@ URL_CREATE_USER = URL_BASE_AD_API + "/api/v1/user/create"
 
 # 查询分组
 URL_QUERY_PACKETS = URL_BASE_AD_API + "/api/v1/group/list"
+# 查询账号列表
+URL_ACCOUNT_LIST = URL_BASE_AD_API + "/api/v1/user/list"
