@@ -14,12 +14,17 @@ class AutomationArea(ft.UserControl):
             on_click=self.handle_onclick,
         )
         self.btn_verifica_code = ElevatedButton(
-            text="自动输入二次验证码",
+            text="自动输入双重验证码",
             col={"sm": 4},
             on_click=self.handle_onclick,
         )
         self.btn_logon_email = ElevatedButton(
             text="自动登录邮箱",
+            col={"sm": 4},
+            on_click=self.handle_onclick,
+        )
+        self.btn_auth_ad_account = ElevatedButton(
+            text="自动企业号授权给广告号",
             col={"sm": 4},
             on_click=self.handle_onclick,
         )
@@ -72,6 +77,8 @@ class AutomationArea(ft.UserControl):
         elif view == self.btn_verifica_code:
             pass
         elif view == self.btn_logon_email:
+            pass
+        elif view == self.btn_auth_ad_account:
             pass
         elif view == self.btn_authorize_note_homepage:
             pass

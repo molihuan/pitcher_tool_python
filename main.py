@@ -6,7 +6,7 @@ from service.routes.app_routes import AppRoutes
 
 
 def main(page: ft.Page):
-    page.title = "超级投手工具"
+    page.title = "几何专用"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
 
     HttpUtils.setDebug(False)

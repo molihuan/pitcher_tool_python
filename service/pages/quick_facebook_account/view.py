@@ -123,5 +123,6 @@ class QuickFacebookAccountPage(UserControl):
             CommonUtils.showSnack(self.page, "打开浏览器失败,请联系开发者")
             return
         CommonUtils.showSnack(self.page, "正在使用吃奶的力气打开浏览器,请稍后几秒...")
+        self.rawAccountMsgTF.current.value = ''
         print(openResult)
         pass
