@@ -1,6 +1,6 @@
 from flet import UserControl, Page, DataTable
 from flet_core import border, Text, DataColumn, DataRow, DataCell, Row, ElevatedButton, Ref, Column, Container, \
-    TextField, MainAxisAlignment, TextAlign
+    TextField, MainAxisAlignment, TextAlign,ListTile,ControlEvent,OutlinedButton
 
 from service.dao.data_manager import DataManager
 from service.http.http import HttpUtils
@@ -16,16 +16,61 @@ class AccountList(UserControl):
         self.dataTableRef = Ref[DataTable]()
         self.accountPageIndex = 1
         self.accountPageIndexShowText = Ref[Text]()
+        self.showGroupBtn = Ref[OutlinedButton]()
 
-    def did_mount(self):
-        self.changeAccountPageIndex(self.accountPageIndex)
-        pass
-
-    def changeAccountPageIndex(self, pageIndex):
+    def initData(self):
         dataJson = DataManager.getGroupMsg(self.page)
         if dataJson is None:
             return
         self.selectedGroupMsg = GroupMsg.from_json(dataJson)
+        self.showGroupBtn.current.text ="分组:"+ self.selectedGroupMsg.group_name
+        self.update()
+
+    # 点击选择分组按钮
+    def clcSelectGroup(self, event):
+        # 查询分组信息
+        response = HttpUtils.queryPackets()
+        if response is None:
+            print("获取分组信息失败")
+            return
+
+        groupMsgList = response['data']['list']
+        print(groupMsgList)
+        groupListView = []
+        for groupItem in groupMsgList:
+            groupMsg = GroupMsg(groupItem['group_id'], groupItem['group_name'])
+            groupListView.append(
+                ListTile(
+                    title=Text(groupMsg.group_name),
+                    data=groupMsg.group_id,
+                    on_click=lambda event, gi=groupMsg: self.clcGroupItem(event, gi)
+                )
+            )
+        # 显示底部弹窗
+        self.bs = CommonUtils.showBottomSheet(self.page, groupListView)
+
+    # 点击分组Item信息
+    def clcGroupItem(self, event: ControlEvent, groupMsg: GroupMsg):
+        CommonUtils.closeBottomSheet(self.page, self.bs)
+        # 持久化
+        saveResult = DataManager.setGroupMsg(self.page, groupMsg.to_json())
+        self.selectedGroupMsg = groupMsg
+        if not saveResult:
+            print('保存失败,请联系开发者解决')
+            return
+        self.showGroupBtn.current.text ="分组:"+ self.selectedGroupMsg.group_name
+        self.changeAccountPageIndex(1)
+        self.update()
+        print('保存成功')
+        pass
+
+    def did_mount(self):
+        self.initData()
+        self.changeAccountPageIndex(self.accountPageIndex)
+        pass
+
+    def changeAccountPageIndex(self, pageIndex):
+
         response = HttpUtils.getAccountList(self.selectedGroupMsg.group_id, pageIndex)
         if (response is None) or (response['code'] != 0):
             print("获取账号列表失败")
@@ -51,6 +96,7 @@ class AccountList(UserControl):
             self.accountViewList.append(dataRow)
         if len(self.accountViewList) == 0:
             CommonUtils.showSnack(self.page, "最后一页了!我也是有底线的")
+            self.accountPageIndex -= 1
             return
         self.dataTableRef.current.rows = self.accountViewList
         self.accountPageIndexShowText.current.value = self.accountPageIndex
@@ -106,7 +152,14 @@ class AccountList(UserControl):
                     vertical_lines=border.BorderSide(1, "grey"),
                     horizontal_lines=border.BorderSide(1, "grey"),
                     columns=[
-                        DataColumn(Text("账号信息")),
+                        DataColumn(
+                            Row(
+                                controls=[
+                                    Text("账号信息"),
+                                    OutlinedButton(ref=self.showGroupBtn,text="分组:",on_click=self.clcSelectGroup),
+                                ]
+                                )
+                            ),
                         DataColumn(Text("操作")),
                     ],
                 ),
