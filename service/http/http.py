@@ -181,7 +181,6 @@ class HttpUtils:
             'open_urls': [
                 'https://start.adspower.net/',
                 'https://facebook.com',
-                'https://outlook.com',
             ],
             'username': facebookMsg.userName,
             'password': facebookMsg.userPwd,

@@ -1,6 +1,7 @@
 from flet import UserControl, Page, DataTable
 from flet_core import border, Text, DataColumn, DataRow, DataCell, Row, ElevatedButton, Ref, Column, Container, \
     TextField, MainAxisAlignment, TextAlign,ListTile,ControlEvent,OutlinedButton
+from service.automation.selenium.logon_facebook import LogonFacebook
 
 from service.dao.data_manager import DataManager
 from service.http.http import HttpUtils
@@ -115,6 +116,7 @@ class AccountList(UserControl):
                                  debugPort=openResult['data']['debug_port'],
                                  webDriver=openResult['data']['webdriver'])
         print(bdc)
+        # LogonFacebook.run(bdc)
 
     def handleCloseAccount(self, event, user_id):
         print("关闭", user_id)

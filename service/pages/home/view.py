@@ -30,3 +30,4 @@ class HomePage(ft.UserControl):
                 alignment=ft.MainAxisAlignment.CENTER
             ),
         )
+    

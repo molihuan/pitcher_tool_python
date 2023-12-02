@@ -1,8 +1,10 @@
 from flet_core import UserControl, Page, Container, Column, ElevatedButton, ScrollMode, MainAxisAlignment, AppBar, Text, \
     colors, alignment, TextField, Row, ListTile, ControlEvent, Ref
+from service.automation.selenium.logon_facebook import LogonFacebook
 from service.dao.data_manager import DataManager
 
 from service.http.http import HttpUtils
+from service.models.browser_debug_config import BrowserDebugConfig
 from service.models.group_msg import GroupMsg
 from service.utils.common_utils import CommonUtils
 from service.utils.str_utils import StrUtils
@@ -126,4 +128,11 @@ class QuickFacebookAccountPage(UserControl):
         self.rawAccountMsgTF.current.value = ''
         self.update()
         print(openResult)
+        bdc = BrowserDebugConfig(debugUrl=openResult['data']['ws']['selenium'],
+                            debugPort=openResult['data']['debug_port'],
+                            webDriver=openResult['data']['webdriver'])
+        # 自动登录facebook
+        LogonFacebook.run(bdc)
+
+        # 自动登录邮箱
         pass
