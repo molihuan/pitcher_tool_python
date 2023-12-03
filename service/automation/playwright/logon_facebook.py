@@ -1,0 +1,53 @@
+from msilib.schema import tables
+import time
+import pyotp
+from playwright.sync_api import sync_playwright
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.window import WindowTypes
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from service.models.browser_debug_config import BrowserDebugConfig
+from service.models.facebook_account_msg import FacebookAccountMsg
+from service.utils.selenium_utils import SeleniumUtils
+
+
+class LogonFacebook():
+    @staticmethod
+    def run(facebookMsg: FacebookAccountMsg, debugConfig: BrowserDebugConfig):
+        with sync_playwright() as playwright:
+            # 调试地址
+            browser = playwright.chromium.connect_over_cdp(endpoint_url=debugConfig.debugWsUrl)
+            context = browser.new_context()
+            context.new_page().goto("https://facebook.com")
+            # 获取所有页面（标签页）的列表
+            pages = context.pages
+            # 切换到最后一个标签页
+            page = pages[-1]
+
+            # 等待账号密码出现
+            page.wait_for_selector('input[id="email"]')
+            page.wait_for_selector('input[id="pass"]')
+            # 点击登录按钮
+            page.locator('button[name="login"]').click()
+            # 输入二次验证码
+            totp = pyotp.TOTP(facebookMsg.checkCode)
+            print(totp.now())
+            page.locator('input[class="inputtext"]').fill(totp.now())
+            page.locator('button[value="continue"]').click()
+
+            # 继续
+            page.locator('button[value="Continue"]').click()
+
+            # 正常的话已经进入了
+            try:
+                # 有验证
+                print("需要获取邮箱验证码")
+                # SeleniumUtils.waitView(driver,(By.CSS_SELECTOR,'button[value="Continue"]'),timeout=4).click()
+                # SeleniumUtils.waitView(driver,(By.CSS_SELECTOR,'button[value="Continue"]'),timeout=3).click()
+                # SeleniumUtils.waitView(driver,(By.CSS_SELECTOR,'button[value="Continue"]'),timeout=3).click()
+                pass
+            except:
+
+                pass

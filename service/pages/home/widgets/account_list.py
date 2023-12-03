@@ -1,6 +1,6 @@
 from flet import UserControl, Page, DataTable
 from flet_core import border, Text, DataColumn, DataRow, DataCell, Row, ElevatedButton, Ref, Column, Container, \
-    TextField, MainAxisAlignment, TextAlign,ListTile,ControlEvent,OutlinedButton
+    TextField, MainAxisAlignment, TextAlign, ListTile, ControlEvent, OutlinedButton
 from service.automation.selenium.logon_facebook import LogonFacebook
 
 from service.dao.data_manager import DataManager
@@ -24,7 +24,7 @@ class AccountList(UserControl):
         if dataJson is None:
             return
         self.selectedGroupMsg = GroupMsg.from_json(dataJson)
-        self.showGroupBtn.current.text ="分组:"+ self.selectedGroupMsg.group_name
+        self.showGroupBtn.current.text = "分组:" + self.selectedGroupMsg.group_name
         self.update()
 
     # 点击选择分组按钮
@@ -59,7 +59,7 @@ class AccountList(UserControl):
         if not saveResult:
             print('保存失败,请联系开发者解决')
             return
-        self.showGroupBtn.current.text ="分组:"+ self.selectedGroupMsg.group_name
+        self.showGroupBtn.current.text = "分组:" + self.selectedGroupMsg.group_name
         self.changeAccountPageIndex(1)
         self.update()
         print('保存成功')
@@ -112,9 +112,12 @@ class AccountList(UserControl):
         if openResult['code'] != 0:
             CommonUtils.showSnack(self.page, "打开浏览器失败,请联系开发者")
             return
-        bdc = BrowserDebugConfig(debugUrl=openResult['data']['ws']['selenium'],
-                                 debugPort=openResult['data']['debug_port'],
-                                 webDriver=openResult['data']['webdriver'])
+        bdc = BrowserDebugConfig(
+            debugUrl=openResult['data']['ws']['selenium'],
+            debugPort=openResult['data']['debug_port'],
+            webDriver=openResult['data']['webdriver'],
+            debugWsUrl=openResult['data']['ws']['puppeteer'],
+        )
         print(bdc)
         # LogonFacebook.run(bdc)
 
@@ -158,10 +161,10 @@ class AccountList(UserControl):
                             Row(
                                 controls=[
                                     Text("账号信息"),
-                                    OutlinedButton(ref=self.showGroupBtn,text="分组:",on_click=self.clcSelectGroup),
+                                    OutlinedButton(ref=self.showGroupBtn, text="分组:", on_click=self.clcSelectGroup),
                                 ]
-                                )
-                            ),
+                            )
+                        ),
                         DataColumn(Text("操作")),
                     ],
                 ),

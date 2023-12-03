@@ -8,4 +8,6 @@ excel解析:openpyxl
 
 自动化:selenium 4
 
+自动化:playwright
+
 二次验证:pyotp 2.9.0

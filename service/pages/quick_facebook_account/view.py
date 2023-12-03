@@ -101,7 +101,7 @@ class QuickFacebookAccountPage(UserControl):
         self.update()
         print('保存成功')
         pass
-    
+
     def handleCreateAccount(self, event):
 
         rawText = self.rawAccountMsgTF.current.value
@@ -114,7 +114,7 @@ class QuickFacebookAccountPage(UserControl):
         if len(groupId.strip()) == 0:
             CommonUtils.showSnack(self.page, "请先选择分组")
             return
-        
+
         facebookMsg = StrUtils.getFacebookAccountMsg(rawText)
         print(facebookMsg)
         createResult = HttpUtils.creatFacebookUser(facebookMsg, groupId, browserName)
@@ -133,15 +133,18 @@ class QuickFacebookAccountPage(UserControl):
 
         print(openResult)
 
-        bdc = BrowserDebugConfig(debugUrl=openResult['data']['ws']['selenium'],
-                            debugPort=openResult['data']['debug_port'],
-                            webDriver=openResult['data']['webdriver'])
-        
+        bdc = BrowserDebugConfig(
+            debugUrl=openResult['data']['ws']['selenium'],
+            debugPort=openResult['data']['debug_port'],
+            webDriver=openResult['data']['webdriver'],
+            debugWsUrl=openResult['data']['ws']['puppeteer'],
+        )
+
         # 自动登录facebook
-        LogonFacebook.run(facebookMsg,bdc)
+        LogonFacebook.run(facebookMsg, bdc)
 
         time.sleep(3)
-        
+
         # 自动登录邮箱
-        LogonOutlook.run(facebookMsg,bdc)
+        LogonOutlook.run(facebookMsg, bdc)
         pass
