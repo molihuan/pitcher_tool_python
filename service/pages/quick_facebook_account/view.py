@@ -141,10 +141,8 @@ class QuickFacebookAccountPage(UserControl):
         )
 
         # 自动登录facebook
-        LogonFacebook.run(facebookMsg, bdc)
-
-        time.sleep(3)
-
+        # LogonFacebook.run(facebookMsg, bdc)
+        # time.sleep(3)
         # 自动登录邮箱
-        LogonOutlook.run(facebookMsg, bdc)
+        # LogonOutlook.run(facebookMsg, bdc)
         pass

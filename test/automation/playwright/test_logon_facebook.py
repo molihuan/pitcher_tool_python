@@ -1,3 +1,4 @@
+import email
 import sys
 import time
 from urllib import response
@@ -18,7 +19,7 @@ from service.http.http import HttpUtils
 from service.utils.selenium_utils import SeleniumUtils
 from service.models.facebook_account_msg import FacebookAccountMsg
 
-user_id = 'jc6r8us'
+user_id = 'jc6yy6l'
 
 # 获取账户是否打开状态
 status = HttpUtils.startupStatus(user_id)
@@ -46,7 +47,9 @@ facebookMsg.userPwd = firstAccount['password']
 with sync_playwright() as playwright:
     # 调试地址
     browser = playwright.chromium.connect_over_cdp(endpoint_url=debugConfig.debugWsUrl)
-    context = browser.new_context()
+    # 获取当前已打开的所有上下文
+    contexts = browser.contexts
+    context=contexts[0]
     context.new_page().goto("https://facebook.com")
     # 获取所有页面（标签页）的列表
     pages = context.pages
@@ -54,8 +57,14 @@ with sync_playwright() as playwright:
     page = pages[-1]
 
     # 等待账号密码出现
-    page.wait_for_selector('input[id="email"]')
-    page.wait_for_selector('input[id="pass"]')
+    email_input=page.wait_for_selector('input[id="email"]')
+    pd_email =email_input.input_value()
+    while (pd_email == None) or (pd_email == ''):
+        time.sleep(1)
+        pd_email =email_input.input_value()
+        
+    print(pd_email)
+
     # 点击登录按钮
     page.locator('button[name="login"]').click()
     # 输入二次验证码

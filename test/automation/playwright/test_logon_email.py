@@ -18,7 +18,7 @@ from service.http.http import HttpUtils
 from service.utils.selenium_utils import SeleniumUtils
 from service.models.facebook_account_msg import FacebookAccountMsg
 
-user_id = 'jc6r8us'
+user_id = 'jc6yy6l'
 
 # 获取账户是否打开状态
 status = HttpUtils.startupStatus(user_id)
@@ -46,15 +46,20 @@ facebookMsg.userPwd = firstAccount['password']
 with sync_playwright() as playwright:
     # 调试地址
     browser = playwright.chromium.connect_over_cdp(endpoint_url=debugConfig.debugWsUrl)
-    context = browser.new_context()
+    # 获取当前已打开的所有上下文
+    contexts = browser.contexts
+    context=contexts[0]
     context.new_page().goto("https://outlook.com/")
-    # 获取所有页面（标签页）的列表
-    pages = context.pages
     # 切换到最后一个标签页
-    page = pages[-1]
+    page = context.pages[-1]
     # 进入登录页
-    page.locator('a[data-bi-cn="SignIn"]').click()
-    page = pages[-1]
+    page.locator('a[data-bi-cn="SignIn"]').first.click()
+    page.wait_for_timeout(2)
+    print(len(context.pages))
+    page = context.pages[-1]
+    page.bring_to_front()
+
+    print(page.url)
 
     # 输入账号
     page.locator('//*[@id="i0116"]').fill(facebookMsg.email)
