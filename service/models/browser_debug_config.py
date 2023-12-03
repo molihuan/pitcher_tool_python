@@ -7,7 +7,7 @@ class BrowserDebugType(Enum):
 
 
 class BrowserDebugConfig():
-    def __init__(self, debugUrl, debugPort, webDriver, browserDebugType=BrowserDebugType.SELENIUM):
+    def __init__(self, debugUrl,  webDriver,debugPort=None, browserDebugType=BrowserDebugType.SELENIUM):
         self.browserDebugType = browserDebugType
         self.debugUrl = debugUrl
         self.debugPort = debugPort

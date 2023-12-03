@@ -1,6 +1,8 @@
+import time
 from flet_core import UserControl, Page, Container, Column, ElevatedButton, ScrollMode, MainAxisAlignment, AppBar, Text, \
     colors, alignment, TextField, Row, ListTile, ControlEvent, Ref
 from service.automation.selenium.logon_facebook import LogonFacebook
+from service.automation.selenium.logon_outlook import LogonOutlook
 from service.dao.data_manager import DataManager
 
 from service.http.http import HttpUtils
@@ -112,6 +114,7 @@ class QuickFacebookAccountPage(UserControl):
         if len(groupId.strip()) == 0:
             CommonUtils.showSnack(self.page, "请先选择分组")
             return
+        
         facebookMsg = StrUtils.getFacebookAccountMsg(rawText)
         print(facebookMsg)
         createResult = HttpUtils.creatFacebookUser(facebookMsg, groupId, browserName)
@@ -127,12 +130,18 @@ class QuickFacebookAccountPage(UserControl):
             return
         self.rawAccountMsgTF.current.value = ''
         self.update()
+
         print(openResult)
+
         bdc = BrowserDebugConfig(debugUrl=openResult['data']['ws']['selenium'],
                             debugPort=openResult['data']['debug_port'],
                             webDriver=openResult['data']['webdriver'])
+        
         # 自动登录facebook
-        LogonFacebook.run(bdc)
+        LogonFacebook.run(facebookMsg,bdc)
 
+        time.sleep(3)
+        
         # 自动登录邮箱
+        LogonOutlook.run(facebookMsg,bdc)
         pass

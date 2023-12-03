@@ -180,12 +180,11 @@ class HttpUtils:
             'domain_name': 'https://facebook.com',
             'open_urls': [
                 'https://start.adspower.net/',
-                'https://facebook.com',
             ],
             'username': facebookMsg.userName,
             'password': facebookMsg.userPwd,
             'fakey': facebookMsg.checkCode,
-            'remark': f"{facebookMsg.email}\n{facebookMsg.emailPwd}\n{facebookMsg.idCardImgUrl}",
+            'remark': f"{facebookMsg.checkCode}\n{facebookMsg.email}\n{facebookMsg.emailPwd}\n{facebookMsg.idCardImgUrl}",
         }
         response = requests.post(URL_CREATE_USER, json=payload)
         data = response.json()
@@ -196,7 +195,7 @@ class HttpUtils:
             return None
 
     @staticmethod
-    def getAccountList(group_id: str, page: int):
+    def getAccounts(page: int,group_id: str=None,user_id:str =None):
         if HttpUtils._debug:
             json_str = '''
                 {
@@ -243,8 +242,10 @@ class HttpUtils:
             # 解析JSON字符串
             json_obj = json.loads(json_str)
             return json_obj
-
-        response = requests.get(URL_ACCOUNT_LIST, params={'page_size': 6, 'group_id': group_id, 'page': page})
+        if user_id == None:  
+          response = requests.get(URL_ACCOUNT_LIST, params={'page_size': 6, 'group_id': group_id, 'page': page})
+        else:
+          response = requests.get(URL_ACCOUNT_LIST, params={'page_size': 1, 'user_id': user_id, 'page': page})
         data = response.json()
         if response.status_code == 200:
             return data

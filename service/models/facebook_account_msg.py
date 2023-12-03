@@ -1,5 +1,5 @@
 class FacebookAccountMsg:
-    def __init__(self, userName, userPwd, checkCode, email, emailPwd, idCardImgUrl):
+    def __init__(self, userName=None, userPwd=None, checkCode=None, email=None, emailPwd=None, idCardImgUrl=None):
         self.userName = userName
         self.userPwd = userPwd
         self.checkCode = checkCode

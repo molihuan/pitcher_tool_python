@@ -72,7 +72,7 @@ class AccountList(UserControl):
 
     def changeAccountPageIndex(self, pageIndex):
 
-        response = HttpUtils.getAccountList(self.selectedGroupMsg.group_id, pageIndex)
+        response = HttpUtils.getAccounts(group_id=self.selectedGroupMsg.group_id, page=pageIndex)
         if (response is None) or (response['code'] != 0):
             print("获取账号列表失败")
             return

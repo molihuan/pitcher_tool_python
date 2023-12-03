@@ -23,3 +23,18 @@ class StrUtils():
             idCardImgUrl=id_card_img_url,
         )
         return fm
+    @staticmethod
+    def getFacebookAccountMsgByRemark(msg: str) -> FacebookAccountMsg:
+        print(msg)
+
+        msg_list = msg.split('\n')
+        if len(msg_list) < 4:
+            print("解析可能有误")
+        # id_card_img_url = msg_list[-2] if msg_list[-1] == "" else msg_list[-1]
+        fm = FacebookAccountMsg(
+            checkCode=msg_list[0],
+            email=msg_list[1],
+            emailPwd=msg_list[2],
+            idCardImgUrl=msg_list[3],
+        )
+        return fm
