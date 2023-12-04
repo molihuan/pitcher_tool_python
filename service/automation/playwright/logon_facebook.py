@@ -2,15 +2,8 @@ from msilib.schema import tables
 import time
 import pyotp
 from playwright.sync_api import sync_playwright
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.window import WindowTypes
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from service.models.browser_debug_config import BrowserDebugConfig
 from service.models.facebook_account_msg import FacebookAccountMsg
-from service.utils.selenium_utils import SeleniumUtils
 
 
 class LogonFacebook():

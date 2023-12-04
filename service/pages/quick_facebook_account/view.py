@@ -1,6 +1,6 @@
 import time
 from flet_core import UserControl, Page, Container, Column, ElevatedButton, ScrollMode, MainAxisAlignment, AppBar, Text, \
-    colors, alignment, TextField, Row, ListTile, ControlEvent, Ref
+    colors, alignment, TextField, Row, ListTile, ControlEvent, Ref,Switch
 from service.automation.selenium.logon_facebook import LogonFacebook
 from service.automation.selenium.logon_outlook import LogonOutlook
 from service.dao.data_manager import DataManager
@@ -19,7 +19,9 @@ class QuickFacebookAccountPage(UserControl):
 
         self.rawAccountMsgTF = Ref[TextField]()
         self.showGroupText = Ref[Text]()
-        self.browserNameTF = Ref[TextField]()
+        self.browserNameTF = Ref[TextField]()    
+        self.autoFacebookSwitch = Ref[Switch]() 
+        self.autoOutlookSwitch = Ref[Switch]() 
 
     def initData(self):
         dataJson = DataManager.getGroupMsg(self.page)
@@ -55,6 +57,10 @@ class QuickFacebookAccountPage(UserControl):
                     hint_text="浏览器名称(可不填,默认为空)",
                     width=self.parent.width / 2
                 ),
+                Row([
+                    Switch(ref=self.autoFacebookSwitch,label="自动登录facebook", value=True),
+                    Switch(ref=self.autoOutlookSwitch,label="自动登录outlook", value=True),
+                ]),
                 ElevatedButton(text="创建并打开",
                                on_click=self.handleCreateAccount),
             ],
@@ -139,10 +145,12 @@ class QuickFacebookAccountPage(UserControl):
             webDriver=openResult['data']['webdriver'],
             debugWsUrl=openResult['data']['ws']['puppeteer'],
         )
-
-        # 自动登录facebook
-        # LogonFacebook.run(facebookMsg, bdc)
-        # time.sleep(3)
-        # 自动登录邮箱
-        # LogonOutlook.run(facebookMsg, bdc)
+        if self.autoFacebookSwitch.current.value:
+            # 自动登录facebook
+            LogonFacebook.run(facebookMsg, bdc)
+        
+        time.sleep(3)
+        if self.autoOutlookSwitch.current.value:
+            # 自动登录邮箱
+            LogonOutlook.run(facebookMsg, bdc)
         pass
