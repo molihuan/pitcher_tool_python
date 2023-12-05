@@ -1,6 +1,7 @@
 from flet import UserControl, Page, DataTable
 from flet_core import border, Text, DataColumn, DataRow, DataCell, Row, ElevatedButton, Ref, Column, Container, \
     TextField, MainAxisAlignment, TextAlign, ListTile, ControlEvent, OutlinedButton
+from service.automation.playwright.center_control_panel import CenterControlPanel
 from service.automation.selenium.logon_facebook import LogonFacebook
 
 from service.dao.data_manager import DataManager
@@ -89,7 +90,10 @@ class AccountList(UserControl):
                                                event, id)),
                             ElevatedButton(text="关闭",
                                            on_click=lambda event, id=accountMsg['user_id']: self.handleCloseAccount(
-                                               event, id))
+                                               event, id)),
+                            ElevatedButton(text="面板",
+                                           on_click=lambda event, id=accountMsg['user_id']: self.handleOpenPanel(
+                                               event, id)),
                         ])
                     ),
                 ],
@@ -129,6 +133,19 @@ class AccountList(UserControl):
             CommonUtils.showSnack(self.page, "关闭浏览器失败,请联系开发者")
             return
         print(result)
+        pass
+
+    def handleOpenPanel(self, event, user_id):
+        status=HttpUtils.startupStatus(user_id)
+        statusData = status['data']
+        if (status['code']!=0):
+            print('获取状态失败')
+            return
+        if (statusData['status'] !='Active'):
+            print('浏览器未打开')
+            return
+        debugWsUrl = statusData['ws']['puppeteer']
+        CenterControlPanel.run(None,BrowserDebugConfig(debugWsUrl=debugWsUrl))
         pass
 
     def handlePrePage(self, event):

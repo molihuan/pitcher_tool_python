@@ -15,6 +15,13 @@ class FileUtils():
         # TODO打包后路径
         assets_path = os.path.join(current_dir, "assets")
         return assets_path
+    @staticmethod
+    def getClientPath():
+        # 获取当前工作目录的路径
+        current_dir = os.getcwd()
+        # TODO打包后路径
+        assets_path = os.path.join(current_dir, "client")
+        return assets_path
 
     @staticmethod
     def open_file_or_folder(path):
