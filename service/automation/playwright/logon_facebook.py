@@ -12,13 +12,12 @@ class LogonFacebook():
         with sync_playwright() as playwright:
             # 调试地址
             browser = playwright.chromium.connect_over_cdp(endpoint_url=debugConfig.debugWsUrl)
-            context = browser.new_context()
-            context.new_page().goto("https://facebook.com")
-            # 获取所有页面（标签页）的列表
-            pages = context.pages
-            # 切换到最后一个标签页
-            page = pages[-1]
-
+            contexts = browser.contexts
+            context = contexts[0]
+            page = context.new_page()
+            page.goto("https://facebook.com")
+            page.wait_for_timeout(1600)
+            page = context.pages[-1]
             # 等待账号密码出现
             page.wait_for_selector('input[id="email"]')
             page.wait_for_selector('input[id="pass"]')
@@ -36,7 +35,7 @@ class LogonFacebook():
             # 正常的话已经进入了
             try:
                 # 有验证
-                print("需要获取邮箱验证码")
+                # print("需要获取邮箱验证码")
                 # SeleniumUtils.waitView(driver,(By.CSS_SELECTOR,'button[value="Continue"]'),timeout=4).click()
                 # SeleniumUtils.waitView(driver,(By.CSS_SELECTOR,'button[value="Continue"]'),timeout=3).click()
                 # SeleniumUtils.waitView(driver,(By.CSS_SELECTOR,'button[value="Continue"]'),timeout=3).click()

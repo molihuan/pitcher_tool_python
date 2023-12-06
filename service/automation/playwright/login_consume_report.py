@@ -1,18 +1,22 @@
-from msilib.schema import tables
-import time
-import pyotp
-from flet_core import Page
+import datetime
+from os import path
+
+import ddddocr
 from playwright.sync_api import sync_playwright
 
-from service.dao.data_manager import DataManager
-from service.models.browser_debug_config import BrowserDebugConfig
-from service.models.facebook_account_msg import FacebookAccountMsg
+from service.utils.file_utils import FileUtils
 
 
+# 登录消费报表
 class LogonConsumeReport():
     @staticmethod
-    def run(page: Page):
-        executable_path = DataManager.getBrowserPath(page)
+    def run():
+        # executable_path = DataManager.getBrowserPath()
+        executable_path = 'C:\\Users\\moli\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe'
+        now = datetime.datetime.now()
+        now_time = now.strftime("%Y-%m-%d_%H-%M-%S")
+        screenshotDirPath = path.join(FileUtils.getTempPath(), 'screenshot')
+        screenshotPath = path.join(screenshotDirPath, f'{now_time}.png')
 
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch(
@@ -21,5 +25,11 @@ class LogonConsumeReport():
             context = browser.new_context()
             page = context.new_page()
             page.goto("http://www.cnhfrj.top/base/data/dcdata")
-            # 等待账号密码出现
-            page.wait_for_selector('.login-code-img').screenshot(path="screenshot.png")
+            page.wait_for_timeout(1500)
+            page = context.pages[-1]
+            # imgBytes = page.wait_for_selector('.login-code-img').screenshot(path=screenshotPath)
+            # ocr = ddddocr.DdddOcr()
+            # res = ocr.classification(imgBytes)
+            # print(res)
+
+            page.wait_for_timeout(5000)

@@ -17,7 +17,7 @@ class CommonUtils():
         page.update()
 
     @staticmethod
-    def showAlertDialog(page: ft.Page, actions: List[Control] = None, content: Control = None, contentStr: str = '内容',
+    def showAlertDialog(page: ft.Page, contentStr: str = '内容', actions: List[Control] = None, content: Control = None,
                         title=None, titleStr='提示', ):
         if content is None:
             content = Text(contentStr)
@@ -29,15 +29,14 @@ class CommonUtils():
                 ft.TextButton("确定", on_click=lambda p: CommonUtils.closeAlertDialog(page, page.dialog)),
             ]
 
-        if page.dialog is None:
-            page.dialog = ft.AlertDialog(
-                modal=True,
-                title=title,
-                content=content,
-                actions=actions,
-                actions_alignment=ft.MainAxisAlignment.END,
-                on_dismiss=lambda e: print("dialog dismissed!"),
-            )
+        page.dialog = ft.AlertDialog(
+            modal=True,
+            title=title,
+            content=content,
+            actions=actions,
+            actions_alignment=ft.MainAxisAlignment.END,
+            on_dismiss=lambda e: print("dialog dismissed!"),
+        )
         page.dialog.open = True
         page.update()
 

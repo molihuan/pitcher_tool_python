@@ -2,6 +2,12 @@ from flet import Page
 
 
 class DataManager():
+    page: Page = None
+
+    @staticmethod
+    def setPage(page: Page):
+        DataManager.page = page
+
     @staticmethod
     def setGroupMsg(page: Page, value):
         return page.client_storage.set("MLH_GroupMsg", value)
@@ -12,10 +18,10 @@ class DataManager():
         return groupMsgDirt
 
     @staticmethod
-    def setBrowserPath(page: Page, value):
-        return page.client_storage.set("MLH_BrowserPath", value)
+    def setBrowserPath(value):
+        return DataManager.page.client_storage.set("MLH_BrowserPath", value)
 
     @staticmethod
-    def getBrowserPath(page: Page):
-        groupMsgDirt = page.client_storage.get("MLH_BrowserPath")
+    def getBrowserPath():
+        groupMsgDirt = DataManager.page.client_storage.get("MLH_BrowserPath")
         return groupMsgDirt

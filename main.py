@@ -2,6 +2,7 @@ from http.server import HTTPServer
 
 from flet import Page, CrossAxisAlignment, app_async, app
 
+from service.dao.data_manager import DataManager
 from service.http.http import HttpUtils
 from service.http.server.base_http_handler import BaseHttpHandler
 from service.routes.app_routes import AppRoutes
@@ -12,6 +13,8 @@ def main(page: Page):
     page.horizontal_alignment = CrossAxisAlignment.CENTER
 
     HttpUtils.setDebug(True)
+
+    DataManager.setPage(page)
 
     # 路由配置
     appRoutes = AppRoutes(page)

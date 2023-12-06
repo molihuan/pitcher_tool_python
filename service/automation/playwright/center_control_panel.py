@@ -8,6 +8,7 @@ from service.models.facebook_account_msg import FacebookAccountMsg
 from service.utils.file_utils import FileUtils
 
 
+# 打开中控面板
 class CenterControlPanel():
     @staticmethod
     def run(facebookMsg: FacebookAccountMsg | None, debugConfig: BrowserDebugConfig):
@@ -17,8 +18,12 @@ class CenterControlPanel():
             browser = playwright.chromium.connect_over_cdp(endpoint_url=debugConfig.debugWsUrl)
             contexts = browser.contexts
             context = contexts[0]
-            context.new_page().goto("file:///" + indexPath)
+            page = context.new_page()
+            page.goto("file:///" + indexPath)
+            page.wait_for_timeout(1500)
             # 获取所有页面（标签页）的列表
             pages = context.pages
             # 切换到最后一个标签页
             page = pages[-1]
+
+            print(page.title())

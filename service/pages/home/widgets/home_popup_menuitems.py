@@ -31,7 +31,7 @@ class HomePopupMenuItems(UserControl):
                                                                                                          self.page.dialog)),
                                     ], )
 
-        browserPath = DataManager.getBrowserPath(self.page)
+        browserPath = DataManager.getBrowserPath()
         print(browserPath)
         self.selectBrowserTF.current.value = browserPath
         self.update()
@@ -39,7 +39,7 @@ class HomePopupMenuItems(UserControl):
     def selectBrowserOk(self, event):
         browserPath = self.selectBrowserTF.current.value
         print(browserPath)
-        DataManager.setBrowserPath(self.page, browserPath)
+        DataManager.setBrowserPath(browserPath)
         pass
 
     def did_mount(self):
