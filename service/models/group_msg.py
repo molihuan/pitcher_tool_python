@@ -2,7 +2,7 @@ import json
 
 
 class GroupMsg():
-    def __init__(self, group_id, group_name):
+    def __init__(self, group_id=None, group_name=None):
         self.group_id = group_id
         self.group_name = group_name
 

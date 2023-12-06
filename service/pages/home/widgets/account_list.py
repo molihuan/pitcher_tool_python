@@ -14,6 +14,7 @@ from service.utils.common_utils import CommonUtils
 class AccountList(UserControl):
     def __init__(self, parent: Page):
         super().__init__()
+        self.selectedGroupMsg = GroupMsg()
         self.parent = parent
         self.dataTableRef = Ref[DataTable]()
         self.accountPageIndex = 1
@@ -136,16 +137,16 @@ class AccountList(UserControl):
         pass
 
     def handleOpenPanel(self, event, user_id):
-        status=HttpUtils.startupStatus(user_id)
+        status = HttpUtils.startupStatus(user_id)
         statusData = status['data']
-        if (status['code']!=0):
+        if (status['code'] != 0):
             print('获取状态失败')
             return
-        if (statusData['status'] !='Active'):
+        if (statusData['status'] != 'Active'):
             print('浏览器未打开')
             return
         debugWsUrl = statusData['ws']['puppeteer']
-        CenterControlPanel.run(None,BrowserDebugConfig(debugWsUrl=debugWsUrl))
+        CenterControlPanel.run(None, BrowserDebugConfig(debugWsUrl=debugWsUrl))
         pass
 
     def handlePrePage(self, event):

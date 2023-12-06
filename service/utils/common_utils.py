@@ -1,7 +1,7 @@
 from typing import List
 
 import flet as ft
-from flet_core import MainAxisAlignment, Control
+from flet_core import MainAxisAlignment, Control, Text
 
 
 class CommonUtils():
@@ -17,16 +17,24 @@ class CommonUtils():
         page.update()
 
     @staticmethod
-    def showAlertDialog(page: ft.Page, content: str, title='提示', ):
+    def showAlertDialog(page: ft.Page, actions: List[Control] = None, content: Control = None, contentStr: str = '内容',
+                        title=None, titleStr='提示', ):
+        if content is None:
+            content = Text(contentStr)
+        if title is None:
+            title = Text(titleStr)
+
+        if actions is None:
+            actions = [
+                ft.TextButton("确定", on_click=lambda p: CommonUtils.closeAlertDialog(page, page.dialog)),
+            ]
+
         if page.dialog is None:
             page.dialog = ft.AlertDialog(
                 modal=True,
-                title=ft.Text(title),
-                content=ft.Text(content),
-                actions=[
-                    ft.TextButton("确定", on_click=lambda p: CommonUtils.closeAlertDialog(page, page.dialog)),
-                    # ft.TextButton("No", on_click=close_dlg),
-                ],
+                title=title,
+                content=content,
+                actions=actions,
                 actions_alignment=ft.MainAxisAlignment.END,
                 on_dismiss=lambda e: print("dialog dismissed!"),
             )

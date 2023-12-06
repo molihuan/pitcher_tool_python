@@ -11,7 +11,7 @@ def main(page: Page):
     page.title = "几何专用"
     page.horizontal_alignment = CrossAxisAlignment.CENTER
 
-    # HttpUtils.setDebug(True)
+    HttpUtils.setDebug(True)
 
     # 路由配置
     appRoutes = AppRoutes(page)

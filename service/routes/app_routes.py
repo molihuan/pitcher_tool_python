@@ -3,6 +3,7 @@ import flet as ft
 from flet_core import AppBar, Text, colors, ElevatedButton, ScrollMode
 
 from service.pages.home.view import HomePage
+from service.pages.home.widgets.home_popup_menuitems import HomePopupMenuItems
 from service.pages.quick_facebook_account.view import QuickFacebookAccountPage
 from service.utils.common_utils import CommonUtils
 
@@ -38,12 +39,7 @@ class AppRoutes():
                     actions=[
                         ft.IconButton(ft.icons.WB_SUNNY_OUTLINED,
                                       on_click=lambda _: CommonUtils.showAlertDialog(self.page, "你干嘛~~哎呦~~")),
-                        ft.PopupMenuButton(
-                            items=[
-                                ft.PopupMenuItem(text="重置设置", on_click=lambda _: self.page.client_storage.clear()),
-                                # ft.PopupMenuItem(),  # divider
-                            ]
-                        ),
+                        HomePopupMenuItems(),
                     ],
                 )
             )
