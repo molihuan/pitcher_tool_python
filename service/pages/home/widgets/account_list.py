@@ -2,7 +2,6 @@ from flet import UserControl, Page, DataTable
 from flet_core import border, Text, DataColumn, DataRow, DataCell, Row, ElevatedButton, Ref, Column, Container, \
     TextField, MainAxisAlignment, TextAlign, ListTile, ControlEvent, OutlinedButton
 from service.automation.playwright.center_control_panel import CenterControlPanel
-from service.automation.selenium.logon_facebook import LogonFacebook
 
 from service.dao.data_manager import DataManager
 from service.http.http import HttpUtils
@@ -72,6 +71,7 @@ class AccountList(UserControl):
         self.changeAccountPageIndex(self.accountPageIndex)
         pass
 
+    # 改变页面索引
     def changeAccountPageIndex(self, pageIndex):
 
         response = HttpUtils.getAccounts(group_id=self.selectedGroupMsg.group_id, page=pageIndex)
@@ -110,6 +110,7 @@ class AccountList(UserControl):
         self.update()
         pass
 
+    # 打开账号
     def handleOpenAccount(self, event, user_id):
         print("打开", user_id)
         CommonUtils.showSnack(self.page, "正在使用吃奶的力气打开浏览器,请稍后几秒...")
@@ -126,6 +127,7 @@ class AccountList(UserControl):
         print(bdc)
         # LogonFacebook.run(bdc)
 
+    # 关闭账号
     def handleCloseAccount(self, event, user_id):
         print("关闭", user_id)
         CommonUtils.showSnack(self.page, "正在使劲关闭浏览器,请稍后...")
@@ -136,6 +138,7 @@ class AccountList(UserControl):
         print(result)
         pass
 
+    # 打开中控面板
     def handleOpenPanel(self, event, user_id):
         status = HttpUtils.startupStatus(user_id)
         statusData = status['data']

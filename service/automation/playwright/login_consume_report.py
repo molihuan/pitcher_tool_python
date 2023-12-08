@@ -1,7 +1,6 @@
 import datetime
 from os import path
 
-import ddddocr
 from playwright.sync_api import sync_playwright
 
 from service.utils.file_utils import FileUtils

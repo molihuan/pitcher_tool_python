@@ -1,8 +1,6 @@
 import time
 from flet_core import UserControl, Page, Container, Column, ElevatedButton, ScrollMode, MainAxisAlignment, AppBar, Text, \
-    colors, alignment, TextField, Row, ListTile, ControlEvent, Ref,Switch
-from service.automation.selenium.logon_facebook import LogonFacebook
-from service.automation.selenium.logon_outlook import LogonOutlook
+    colors, alignment, TextField, Row, ListTile, ControlEvent, Ref, Switch
 from service.dao.data_manager import DataManager
 
 from service.http.http import HttpUtils
@@ -19,9 +17,9 @@ class QuickFacebookAccountPage(UserControl):
 
         self.rawAccountMsgTF = Ref[TextField]()
         self.showGroupText = Ref[Text]()
-        self.browserNameTF = Ref[TextField]()    
-        self.autoFacebookSwitch = Ref[Switch]() 
-        self.autoOutlookSwitch = Ref[Switch]() 
+        self.browserNameTF = Ref[TextField]()
+        self.autoFacebookSwitch = Ref[Switch]()
+        self.autoOutlookSwitch = Ref[Switch]()
 
     def initData(self):
         dataJson = DataManager.getGroupMsg(self.page)
@@ -58,8 +56,8 @@ class QuickFacebookAccountPage(UserControl):
                     width=self.parent.width / 2
                 ),
                 Row([
-                    Switch(ref=self.autoFacebookSwitch,label="自动登录facebook", value=True),
-                    Switch(ref=self.autoOutlookSwitch,label="自动登录outlook", value=True),
+                    Switch(ref=self.autoFacebookSwitch, label="自动登录facebook", value=True),
+                    Switch(ref=self.autoOutlookSwitch, label="自动登录outlook", value=True),
                 ]),
                 ElevatedButton(text="创建并打开",
                                on_click=self.handleCreateAccount),
@@ -147,10 +145,12 @@ class QuickFacebookAccountPage(UserControl):
         )
         if self.autoFacebookSwitch.current.value:
             # 自动登录facebook
-            LogonFacebook.run(facebookMsg, bdc)
-        
+            # LogonFacebook.run(facebookMsg, bdc)
+            pass
+
         time.sleep(3)
         if self.autoOutlookSwitch.current.value:
             # 自动登录邮箱
-            LogonOutlook.run(facebookMsg, bdc)
+            # LogonOutlook.run(facebookMsg, bdc)
+            pass
         pass
