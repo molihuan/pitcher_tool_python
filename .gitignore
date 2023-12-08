@@ -2,3 +2,6 @@
 __pycache__/
 .venv
 temp/
+/script/*
+!/script/app_msg.py
+!/script/packag.py
