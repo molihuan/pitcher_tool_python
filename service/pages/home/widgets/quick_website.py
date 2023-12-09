@@ -2,7 +2,6 @@ import os
 
 import flet as ft
 
-
 from flet_core import ElevatedButton, Container, ResponsiveRow, Column, ListView, Row, Text, IconButton
 from openpyxl import load_workbook
 import pyperclip
@@ -10,7 +9,6 @@ from service.utils.common_utils import CommonUtils
 
 from service.utils.file_utils import FileUtils
 from service.utils.web_utils import WebUtils
-
 
 
 class QuickWebsite(ft.UserControl):
@@ -32,16 +30,15 @@ class QuickWebsite(ft.UserControl):
                 col={"sm": 4},
                 # 必须复制一份dirFilePath=row[1]
                 on_click=lambda event, url=cells[1].value: self.openWebsite(event, url),
-                on_long_press= lambda event, url=cells[1].value: self.handleLongPress(event, url),
+                on_long_press=lambda event, url=cells[1].value: self.handleLongPress(event, url),
             )
             self.shortcutWebsiteBtnList.append(btnItem)
-
 
     def build(self):
         self.initData()
         return ListView([
             Row([
-                Text("快捷网址", size=20),
+                Text("快捷网址(长按复制网址)", size=20),
                 IconButton(
                     icon=ft.icons.SETTINGS,
                     icon_color="blue400",
@@ -52,9 +49,6 @@ class QuickWebsite(ft.UserControl):
             ]),
             ResponsiveRow(self.shortcutWebsiteBtnList, alignment=ft.MainAxisAlignment.START),
         ])
-
-
-
 
     def openWebsite(self, event, url):
         print(event)

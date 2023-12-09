@@ -13,13 +13,13 @@ class CenterControlPanel():
     @staticmethod
     def run(facebookMsg: FacebookAccountMsg | None, debugConfig: BrowserDebugConfig):
         with sync_playwright() as playwright:
-            # indexPath = path.join(FileUtils.getClientPath(), 'index.html')
+            indexPath = path.join(FileUtils.getClientPath(), 'index.html')
             # 调试地址
             browser = playwright.chromium.connect_over_cdp(endpoint_url=debugConfig.debugWsUrl)
             contexts = browser.contexts
             context = contexts[0]
             page = context.new_page()
-            page.goto('')
+            page.goto('file:///' + indexPath)
             page.wait_for_timeout(1500)
             # 获取所有页面（标签页）的列表
             pages = context.pages

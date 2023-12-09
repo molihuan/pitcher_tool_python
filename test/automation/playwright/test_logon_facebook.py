@@ -7,16 +7,10 @@ from playwright.sync_api import sync_playwright
 
 sys.path.append('E:\\software\\python\\Project\\pitcher_tool_python')
 
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.window import WindowTypes
 from service.utils.str_utils import StrUtils
 from service.models.browser_debug_config import BrowserDebugConfig
 from service.http.http import HttpUtils
-from service.utils.selenium_utils import SeleniumUtils
+
 from service.models.facebook_account_msg import FacebookAccountMsg
 
 user_id = 'jc6yy6l'
@@ -49,7 +43,7 @@ with sync_playwright() as playwright:
     browser = playwright.chromium.connect_over_cdp(endpoint_url=debugConfig.debugWsUrl)
     # 获取当前已打开的所有上下文
     contexts = browser.contexts
-    context=contexts[0]
+    context = contexts[0]
     context.new_page().goto("https://facebook.com")
     # 获取所有页面（标签页）的列表
     pages = context.pages
@@ -57,12 +51,12 @@ with sync_playwright() as playwright:
     page = pages[-1]
 
     # 等待账号密码出现
-    email_input=page.wait_for_selector('input[id="email"]')
-    pd_email =email_input.input_value()
+    email_input = page.wait_for_selector('input[id="email"]')
+    pd_email = email_input.input_value()
     while (pd_email == None) or (pd_email == ''):
         time.sleep(1)
-        pd_email =email_input.input_value()
-        
+        pd_email = email_input.input_value()
+
     print(pd_email)
 
     # 点击登录按钮

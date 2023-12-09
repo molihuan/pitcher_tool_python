@@ -44,7 +44,6 @@ class BaseHttpHandler(SimpleHTTPRequestHandler):
 
             url_parts = urlparse(self.path)
             query_params = parse_qs(url_parts.query)
-
             print(query_params)
             # 获取名为 "param1" 的参数值
             # param1 = query_params.get('param1', [''])[0]
