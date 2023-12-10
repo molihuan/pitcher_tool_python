@@ -10,7 +10,7 @@ from service.utils.str_utils import StrUtils
 from service.models.browser_debug_config import BrowserDebugConfig
 from service.http.http import HttpUtils
 
-user_id = 'jc6yy6l'
+user_id = 'jcdtjn9'
 
 # 获取账户是否打开状态
 status = HttpUtils.startupStatus(user_id)
@@ -41,6 +41,8 @@ with sync_playwright() as playwright:
     # 获取当前已打开的所有上下文
     contexts = browser.contexts
     context = contexts[0]
+    # 启动跟踪功能
+    context.tracing.start(snapshots=True, sources=True, screenshots=True)
     page = context.new_page()
     page.goto("https://outlook.com/")
     page.wait_for_timeout(2000)
@@ -49,34 +51,43 @@ with sync_playwright() as playwright:
     # 进入登录页
     page.locator('a[data-bi-cn="SignIn"]').first.click()
     page.wait_for_timeout(2000)
+    page.close()
 
     page = context.pages[-1]
     
-    print(page.url)
-
+    page.wait_for_timeout(1000)
     # 输入账号
-    page.locator('//*[@id="i0116"]').fill(facebookMsg.email)
+
+    page.wait_for_selector('//*[@id="i0116"]').fill(facebookMsg.email)
     page.locator('//*[@id="idSIButton9"]').click()
 
+    
+    page.wait_for_timeout(1000)
     # 输入密码
-    page.locator('//*[@id="i0118"]').fill(facebookMsg.emailPwd)
+    page.wait_for_selector('//*[@id="i0118"]').fill(facebookMsg.emailPwd)
     page.locator('//*[@id="idSIButton9"]').click()
 
+    page.wait_for_timeout(1000)
+    # 备用电子邮件
     try:
-        page.locator('//*[@id="iShowSkip"]').click(timeout=3)
-    except:
+        page.wait_for_selector('//*[@id="iShowSkip"]',timeout=10000).click()
+    except :
+        print('没有出现备用邮箱选项')
 
-        pass
+    page.wait_for_timeout(1000)
     try:
         # 保持登录状态?
-        page.locator('//*[@id="acceptButton"]').click(timeout=2)
-    except:
+        page.wait_for_selector('//*[@id="acceptButton"]',timeout=10000).click()
+    except :
         # 保持登录状态?
-        page.locator('//*[@id="idSIButton9"]').click(timeout=3)
-        pass
-
+        page.wait_for_selector('//*[@id="idSIButton9"]',timeout=10000).click()
+        print('没有保持登录状态?选项')
+        
+    page.wait_for_timeout(1000)
     try:
         # 摆脱密码束缚
-        page.locator('//*[@id="iCancel"]').click()
+        page.wait_for_selector('//*[@id="iCancel"]').click()
     except:
         pass
+    # 结束跟踪
+    context.tracing.stop(path="./test_logon_email_trace.zip")

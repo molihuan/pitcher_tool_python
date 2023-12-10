@@ -25,5 +25,10 @@ class CenterControlPanel():
             pages = context.pages
             # 切换到最后一个标签页
             page = pages[-1]
+            # 设置LocalStorage浏览器id
+            page.evaluate('localStorage.setItem("browserDebugConfig", JSON.stringify({"browserId":"'+debugConfig.browserId+'"}))')
+
+            # 刷新页面以使修改生效
+            page.reload()
 
             print(page.title())

@@ -1,5 +1,7 @@
 from http.server import BaseHTTPRequestHandler, SimpleHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
+from service.automation.playwright.browser.browser_automation import BrowserAutomation
+from service.automation.playwright.browser.quick_url import QuickUrl
 
 from service.automation.playwright.login_consume_report import LogonConsumeReport
 from service.http.server.response_body import ResponseBody
@@ -32,23 +34,44 @@ class BaseHttpHandler(SimpleHTTPRequestHandler):
             self.end_headers()
             ret = ResponseBody.success_json_encode('服务器正常!')
             self.wfile.write(ret)
+
+        #快速网址
         elif self.path.startswith('/quick_url?'):
             self.send_response(200)
+
+            url_parts = urlparse(self.path)
+            query_params = parse_qs(url_parts.query)
+            browserId=query_params['browserId'][0]
+            func=query_params['func'][0]
+            print(browserId)
+            print(func)
+            # 根据方法名调用方法注意参数
+            qu = QuickUrl()
+            method = getattr(qu, func)
+            method(browserId)
+
             self.send_header('Access-Control-Allow-Origin', '*')  # 允许任何来源的跨域请求
             self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')  # 允许跨域请求的方法
             self.send_header('Content-type', 'application/json')
             self.end_headers()
             ret = ResponseBody.success_json_encode('服务器正常!')
             self.wfile.write(ret)
-        elif self.path.startswith('/automation?'):
 
+        #自动化
+        elif self.path.startswith('/automation?'):
+            self.send_response(200)
+            
             url_parts = urlparse(self.path)
             query_params = parse_qs(url_parts.query)
-            print(query_params)
-            # 获取名为 "param1" 的参数值
-            # param1 = query_params.get('param1', [''])[0]
+            browserId=query_params['browserId'][0]
+            func=query_params['func'][0]
+            print(browserId)
+            print(func)
+            # 根据方法名调用方法注意参数
+            ba = BrowserAutomation()
+            method = getattr(ba, func)
+            method(browserId)
 
-            self.send_response(200)
             self.send_header('Access-Control-Allow-Origin', '*')  # 允许任何来源的跨域请求
             self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')  # 允许跨域请求的方法
             self.send_header('Content-type', 'application/json')

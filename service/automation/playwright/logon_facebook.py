@@ -19,8 +19,14 @@ class LogonFacebook():
             page.wait_for_timeout(1600)
             page = context.pages[-1]
             # 等待账号密码出现
-            page.wait_for_selector('input[id="email"]')
+            account_input=page.wait_for_selector('input[id="email"]')
             page.wait_for_selector('input[id="pass"]')
+            pd_account = account_input.input_value()
+            while (pd_account == None) or (pd_account == ''):
+                time.sleep(1)
+                pd_account = account_input.input_value()
+
+            print(pd_account)
             # 点击登录按钮
             page.locator('button[name="login"]').click()
             # 输入二次验证码
@@ -43,3 +49,5 @@ class LogonFacebook():
             except:
 
                 pass
+
+            

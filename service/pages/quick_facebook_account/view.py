@@ -1,6 +1,8 @@
 import time
 from flet_core import UserControl, Page, Container, Column, ElevatedButton, ScrollMode, MainAxisAlignment, AppBar, Text, \
     colors, alignment, TextField, Row, ListTile, ControlEvent, Ref, Switch
+from service.automation.playwright.login_outlook import LoginOutlook
+from service.automation.playwright.logon_facebook import LogonFacebook
 from service.dao.data_manager import DataManager
 
 from service.http.http import HttpUtils
@@ -145,12 +147,12 @@ class QuickFacebookAccountPage(UserControl):
         )
         if self.autoFacebookSwitch.current.value:
             # 自动登录facebook
-            # LogonFacebook.run(facebookMsg, bdc)
+            LogonFacebook.run(facebookMsg, bdc)
             pass
 
         time.sleep(3)
         if self.autoOutlookSwitch.current.value:
             # 自动登录邮箱
-            # LogonOutlook.run(facebookMsg, bdc)
+            LoginOutlook.run(facebookMsg, bdc)
             pass
         pass

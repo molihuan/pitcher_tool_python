@@ -149,7 +149,7 @@ class AccountList(UserControl):
             print('浏览器未打开')
             return
         debugWsUrl = statusData['ws']['puppeteer']
-        CenterControlPanel.run(None, BrowserDebugConfig(debugWsUrl=debugWsUrl))
+        CenterControlPanel.run(None, BrowserDebugConfig(debugWsUrl=debugWsUrl,browserId=user_id))
         pass
 
     def handlePrePage(self, event):

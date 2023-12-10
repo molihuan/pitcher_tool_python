@@ -80,12 +80,12 @@
                     快捷网址
                 </div>
                 <div class="layui-card-body">
-                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">Facebook主页</button>
-                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">公共主页授权页</button>
-                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">业务支持中心</button>
-                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">BM页面</button>
-                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">聊天页面(msg)</button>
-                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">下户平台(Cyberklick)
+                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue" lay-on="openFacebookMainPage">Facebook主页</button>
+                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue" lay-on="openFacebookProfileAccess">公共主页授权页</button>
+                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue" lay-on="openFacebookBusinessSupportHome">业务支持中心</button>
+                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue" lay-on="openFacebookAdAccounts">BM页面</button>
+                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue" lay-on="openFacebookChatInbox">聊天页面(msg)</button>
+                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue" lay-on="openCyberklick">下户平台(Cyberklick)
                     </button>
 
                 </div>
@@ -95,7 +95,7 @@
                     自动化
                 </div>
                 <div class="layui-card-body">
-                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue" lay-on="alert">自动登录邮箱
+                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue" lay-on="loginOutlook">自动登录邮箱
                     </button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">自动输入2FA验证码</button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">广告账户授权给某个邮箱</button>
@@ -147,6 +147,7 @@
         });
 
         util.on('lay-on', {
+
             alert: function () {
 
                 $.ajax({
@@ -166,6 +167,159 @@
                 })
 
             },
+            openFacebookMainPage: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.browserId); 
+
+                $.ajax({
+                    url: 'http://127.0.0.1:54111/quick_url',
+                    data: {
+                        'browserId': browserDebugConfig.browserId,
+                        'func':'openFacebookMainPage',
+                    },
+                    success: function (response) {
+                        // 请求成功，处理响应数据
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // 请求失败
+                        console.log('Request failed. Status: ' + status + '. Error: ' + error);
+                    }
+                })
+
+            },
+            loginOutlook: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.browserId); 
+
+                $.ajax({
+                    url: 'http://127.0.0.1:54111/automation',
+                    data: {
+                        'browserId': browserDebugConfig.browserId,
+                        'func':'loginOutlook',
+                    },
+                    success: function (response) {
+                        // 请求成功，处理响应数据
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // 请求失败
+                        console.log('Request failed. Status: ' + status + '. Error: ' + error);
+                    }
+                })
+
+            },
+            openFacebookProfileAccess: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.browserId); 
+
+                $.ajax({
+                    url: 'http://127.0.0.1:54111/quick_url',
+                    data: {
+                        'browserId': browserDebugConfig.browserId,
+                        'func':'openFacebookProfileAccess',
+                    },
+                    success: function (response) {
+                        // 请求成功，处理响应数据
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // 请求失败
+                        console.log('Request failed. Status: ' + status + '. Error: ' + error);
+                    }
+                })
+
+            },
+            openFacebookBusinessSupportHome: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.browserId); 
+
+                $.ajax({
+                    url: 'http://127.0.0.1:54111/quick_url',
+                    data: {
+                        'browserId': browserDebugConfig.browserId,
+                        'func':'openFacebookBusinessSupportHome',
+                    },
+                    success: function (response) {
+                        // 请求成功，处理响应数据
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // 请求失败
+                        console.log('Request failed. Status: ' + status + '. Error: ' + error);
+                    }
+                })
+
+            },
+            openFacebookAdAccounts: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.browserId); 
+
+                $.ajax({
+                    url: 'http://127.0.0.1:54111/quick_url',
+                    data: {
+                        'browserId': browserDebugConfig.browserId,
+                        'func':'openFacebookAdAccounts',
+                    },
+                    success: function (response) {
+                        // 请求成功，处理响应数据
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // 请求失败
+                        console.log('Request failed. Status: ' + status + '. Error: ' + error);
+                    }
+                })
+
+            },
+
+            openFacebookChatInbox: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.browserId); 
+
+                $.ajax({
+                    url: 'http://127.0.0.1:54111/quick_url',
+                    data: {
+                        'browserId': browserDebugConfig.browserId,
+                        'func':'openFacebookChatInbox',
+                    },
+                    success: function (response) {
+                        // 请求成功，处理响应数据
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // 请求失败
+                        console.log('Request failed. Status: ' + status + '. Error: ' + error);
+                    }
+                })
+
+            },
+
+            openCyberklick: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.browserId); 
+
+                $.ajax({
+                    url: 'http://127.0.0.1:54111/quick_url',
+                    data: {
+                        'browserId': browserDebugConfig.browserId,
+                        'func':'openCyberklick',
+                    },
+                    success: function (response) {
+                        // 请求成功，处理响应数据
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // 请求失败
+                        console.log('Request failed. Status: ' + status + '. Error: ' + error);
+                    }
+                })
+
+            },
+
+            
+
+
 
         })
 

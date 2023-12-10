@@ -13,7 +13,7 @@ from service.http.http import HttpUtils
 
 from service.models.facebook_account_msg import FacebookAccountMsg
 
-user_id = 'jc6yy6l'
+user_id = 'jccmbhf'
 
 # 获取账户是否打开状态
 status = HttpUtils.startupStatus(user_id)
@@ -44,11 +44,11 @@ with sync_playwright() as playwright:
     # 获取当前已打开的所有上下文
     contexts = browser.contexts
     context = contexts[0]
-    context.new_page().goto("https://facebook.com")
-    # 获取所有页面（标签页）的列表
-    pages = context.pages
+    page=context.new_page()
+    page.goto("https://facebook.com")
+    page.wait_for_timeout(2000)
     # 切换到最后一个标签页
-    page = pages[-1]
+    page = context.pages[-1]
 
     # 等待账号密码出现
     email_input = page.wait_for_selector('input[id="email"]')
@@ -73,7 +73,7 @@ with sync_playwright() as playwright:
     # 正常的话已经进入了
     try:
         # 有验证
-        print("需要获取邮箱验证码")
+        # print("需要获取邮箱验证码")
         # SeleniumUtils.waitView(driver,(By.CSS_SELECTOR,'button[value="Continue"]'),timeout=4).click()
         # SeleniumUtils.waitView(driver,(By.CSS_SELECTOR,'button[value="Continue"]'),timeout=3).click()
         # SeleniumUtils.waitView(driver,(By.CSS_SELECTOR,'button[value="Continue"]'),timeout=3).click()

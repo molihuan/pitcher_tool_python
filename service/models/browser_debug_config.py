@@ -8,7 +8,7 @@ class BrowserDebugType(Enum):
 
 class BrowserDebugConfig():
     def __init__(self, debugUrl=None, webDriver=None, debugPort=None, debugWsUrl=None,
-                 browserDebugType=BrowserDebugType.SELENIUM):
+                 browserDebugType=BrowserDebugType.SELENIUM,browserId=None):
         self.browserDebugType = browserDebugType
         # selenium调试需要信息
         self.debugUrl = debugUrl
@@ -16,6 +16,7 @@ class BrowserDebugConfig():
         self.webDriver = webDriver
         # playwright调试需要信息
         self.debugWsUrl = debugWsUrl
+        self.browserId =browserId
 
     def __str__(self):
         return f"BrowserDebugConfig(browserDebugType={self.browserDebugType}, debugUrl={self.debugUrl}, debugPort={self.debugPort}, webDriver={self.webDriver}, debugWsUrl={self.debugWsUrl})"
