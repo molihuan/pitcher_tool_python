@@ -1,6 +1,7 @@
 import time
 from flet_core import UserControl, Page, Container, Column, ElevatedButton, ScrollMode, MainAxisAlignment, AppBar, Text, \
     colors, alignment, TextField, Row, ListTile, ControlEvent, Ref, Switch
+from service.automation.playwright.center_control_panel import CenterControlPanel
 from service.automation.playwright.login_outlook import LoginOutlook
 from service.automation.playwright.logon_facebook import LogonFacebook
 from service.dao.data_manager import DataManager
@@ -58,8 +59,8 @@ class QuickFacebookAccountPage(UserControl):
                     width=self.parent.width / 2
                 ),
                 Row([
-                    Switch(ref=self.autoFacebookSwitch, label="自动登录facebook", value=True),
-                    Switch(ref=self.autoOutlookSwitch, label="自动登录outlook", value=True),
+                    Switch(ref=self.autoFacebookSwitch, label="自动登录facebook(网络要快)", value=True),
+                    Switch(ref=self.autoOutlookSwitch, label="自动登录outlook(网络要快)", value=True),
                 ]),
                 ElevatedButton(text="创建并打开",
                                on_click=self.handleCreateAccount),
@@ -144,15 +145,20 @@ class QuickFacebookAccountPage(UserControl):
             debugPort=openResult['data']['debug_port'],
             webDriver=openResult['data']['webdriver'],
             debugWsUrl=openResult['data']['ws']['puppeteer'],
+            browserId=accountId,
         )
+        # 打开中控面板
+        CenterControlPanel.run(None, bdc)
+
         if self.autoFacebookSwitch.current.value:
             # 自动登录facebook
             LogonFacebook.run(facebookMsg, bdc)
             pass
 
-        time.sleep(3)
+        time.sleep(2)
         if self.autoOutlookSwitch.current.value:
             # 自动登录邮箱
             LoginOutlook.run(facebookMsg, bdc)
             pass
         pass
+

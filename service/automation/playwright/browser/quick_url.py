@@ -33,6 +33,7 @@ class QuickUrl():
             contexts = browser.contexts
             context = contexts[0]
             page = context.new_page()
+            #获取所有的主页
             page.goto('https://www.facebook.com/settings/?tab=profile_access')
     # 业务支持中心
     @staticmethod

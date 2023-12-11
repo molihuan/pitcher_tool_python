@@ -5,3 +5,5 @@ temp/
 /script/*
 !/script/app_msg.py
 !/script/packag.py
+/build
+/dist

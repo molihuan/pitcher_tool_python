@@ -31,5 +31,5 @@ class HomePage(ft.UserControl):
         )
 
     def test01(self):
-        # CommonUtils.showAlertDialog(self.page, "你干嘛~~哎呦~~")
-        LogonConsumeReport.run()
+        CommonUtils.showAlertDialog(self.page, "你干嘛~~哎呦~~")
+        

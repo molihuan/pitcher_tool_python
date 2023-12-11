@@ -13,6 +13,7 @@ class BrowserAutomation():
     @staticmethod
     def loginOutlook(browserId: str):
         debugConfig=PlaywrightUtils.getBrowserDebugConfigMsg(browserId=browserId)
+        time.sleep(1.2)
         facebookMsg=PlaywrightUtils.getFacebookAccountMsg(browserId=browserId)
 
         with sync_playwright() as playwright:
@@ -80,4 +81,35 @@ class BrowserAutomation():
                 page.wait_for_selector('//*[@id="iCancel"]').click()
             except:
                 pass
+    @staticmethod
+    def input2fa(browserId: str):
+        debugConfig=PlaywrightUtils.getBrowserDebugConfigMsg(browserId=browserId)
+        time.sleep(1.2)
+        facebookMsg=PlaywrightUtils.getFacebookAccountMsg(browserId=browserId)
+
+        with sync_playwright() as playwright:
+            # 调试地址
+            browser = playwright.chromium.connect_over_cdp(endpoint_url=debugConfig.debugWsUrl)
+            # 获取当前已打开的所有上下文
+            contexts = browser.contexts
+            context = contexts[0]
+            pages = context.pages
+            targetPage = None
+            for page in pages:
+                chooseOne=page.url.startswith('https://business.facebook.com/security/twofactor/reauth')
+                if chooseOne:
+                    targetPage = page
+                    break
+            if targetPage == None:
+                print('不需要输入2fa')
+                return
+            # 输入二次验证码
+            totp = pyotp.TOTP(facebookMsg.checkCode)
+            print(totp.now())
+            targetPage.wait_for_selector('//*[@id="js_2"]').fill(totp.now())
+            targetPage.get_by_role('button').last.click()
+            # targetPage.reload()
+
+
+
             

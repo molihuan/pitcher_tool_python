@@ -8,6 +8,7 @@ import PyInstaller.__main__
 # ///////////////不能改变导入顺序///////////////////////////////
 workPath = os.getcwd()
 workParentPath = os.path.dirname(workPath)
+workParentPath = os.path.dirname(workPath)+'\\pitcher_tool_python'
 # 将workParentPath也设置为工作目录
 sys.path.append(workParentPath)
 
@@ -68,7 +69,7 @@ def Ppkg(sysType):
         # 前面的顺序不要动
         # '--add-binary', f'{ffmpegExePath}:{ffmpegPackageDir}',  # 将ffmpeg文件夹复制到指定目录
         # '--onefile',  # 打包成一个单独的可执行文件
-        '--noconsole',  # 不显示控制台窗口
+        # '--noconsole',  # 不显示控制台窗口
         '--clean',
         '--distpath', outputDir
     ]

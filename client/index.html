@@ -95,9 +95,9 @@
                     自动化
                 </div>
                 <div class="layui-card-body">
-                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue" lay-on="loginOutlook">自动登录邮箱
+                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue" lay-on="loginOutlook">自动登录邮箱(网速要快)
                     </button>
-                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">自动输入2FA验证码</button>
+                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue" lay-on="input2fa">自动输入2FA验证码</button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">广告账户授权给某个邮箱</button>
 
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">公共主页授权给某个人</button>
@@ -106,6 +106,7 @@
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">自动替换主页‘茶’背景和头像</button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">自动填写开户信息</button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">自动上广告</button>
+                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">下载身份证图片</button>
                 </div>
             </div>
 
@@ -304,6 +305,28 @@
                     data: {
                         'browserId': browserDebugConfig.browserId,
                         'func':'openCyberklick',
+                    },
+                    success: function (response) {
+                        // 请求成功，处理响应数据
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // 请求失败
+                        console.log('Request failed. Status: ' + status + '. Error: ' + error);
+                    }
+                })
+
+            },
+
+            input2fa: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.browserId); 
+
+                $.ajax({
+                    url: 'http://127.0.0.1:54111/automation',
+                    data: {
+                        'browserId': browserDebugConfig.browserId,
+                        'func':'input2fa',
                     },
                     success: function (response) {
                         // 请求成功，处理响应数据
