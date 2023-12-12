@@ -1,3 +1,5 @@
+import time
+
 from flet import UserControl, Page, DataTable
 from flet_core import border, Text, DataColumn, DataRow, DataCell, Row, ElevatedButton, Ref, Column, Container, \
     TextField, MainAxisAlignment, TextAlign, ListTile, ControlEvent, OutlinedButton
@@ -89,11 +91,14 @@ class AccountList(UserControl):
                             ElevatedButton(text="打开",
                                            on_click=lambda event, id=accountMsg['user_id']: self.handleOpenAccount(
                                                event, id)),
-                            ElevatedButton(text="关闭",
-                                           on_click=lambda event, id=accountMsg['user_id']: self.handleCloseAccount(
-                                               event, id)),
                             ElevatedButton(text="面板",
                                            on_click=lambda event, id=accountMsg['user_id']: self.handleOpenPanel(
+                                               event, id)),
+                            ElevatedButton(text="重启",
+                                           on_click=lambda event, id=accountMsg['user_id']: self.handleRestartAccount(
+                                               event, id)),
+                            ElevatedButton(text="关闭",
+                                           on_click=lambda event, id=accountMsg['user_id']: self.handleCloseAccount(
                                                event, id)),
                         ])
                     ),
@@ -149,7 +154,7 @@ class AccountList(UserControl):
             print('浏览器未打开')
             return
         debugWsUrl = statusData['ws']['puppeteer']
-        CenterControlPanel.run(None, BrowserDebugConfig(debugWsUrl=debugWsUrl,browserId=user_id))
+        CenterControlPanel.run(None, BrowserDebugConfig(debugWsUrl=debugWsUrl, browserId=user_id))
         pass
 
     def handlePrePage(self, event):
@@ -201,3 +206,9 @@ class AccountList(UserControl):
 
             ]
         )
+
+    def handleRestartAccount(self, event, id):
+        self.handleCloseAccount(event=event, user_id=id)
+        time.sleep(1.2)
+        self.handleOpenAccount(event=event, user_id=id)
+        pass

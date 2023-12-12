@@ -23,6 +23,23 @@ class StrUtils():
             idCardImgUrl=id_card_img_url,
         )
         return fm
+
+    @staticmethod
+    def getBlackFacebookAccountMsg(msg: str) -> FacebookAccountMsg:
+        print(msg)
+        # 处理前后空格
+        msg = msg.strip()
+        msg_list = msg.split('\t')
+        if len(msg_list) < 3:
+            print("解析可能有误")
+
+        fm = FacebookAccountMsg(
+            userName=msg_list[0],
+            userPwd=msg_list[1],
+            cookie=msg_list[2]
+        )
+        return fm
+
     @staticmethod
     def getFacebookAccountMsgByRemark(msg: str) -> FacebookAccountMsg:
         print(msg)

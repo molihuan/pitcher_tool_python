@@ -194,8 +194,56 @@ class HttpUtils:
             print("creatFacebookUser err")
             return None
 
+    # 创建大小黑账户
     @staticmethod
-    def getAccounts(page: int,group_id: str=None,user_id:str =None):
+    def creatBlackFacebookUser(facebookMsg: FacebookAccountMsg, groupId, name='', ):
+        if HttpUtils._debug:
+            json_str = '''
+                {
+                  "code": 0,
+                  "data": {
+                    "id":"xxxxxxx"
+                  },
+                  "msg": "Success"
+                }
+            '''
+            # 解析JSON字符串
+            json_obj = json.loads(json_str)
+            return json_obj
+        payload = {
+            'name': name,
+            'group_id': groupId,
+            'user_proxy_config': {"proxy_soft": "no_proxy"},
+            'fingerprint_config': {
+                "automatic_timezone": "1",
+                "language": ["en-US", "en", "zh-CN", "zh"],
+                "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.5993.70 Safari/537.36",
+            },
+            'domain_name': 'https://facebook.com',
+            'open_urls': [
+                'https://start.adspower.net/',
+                'https://facebook.com',
+            ],
+            # 'username': facebookMsg.userName,
+            # 'password': facebookMsg.userPwd,
+            'cookie': facebookMsg.cookie
+        }
+
+        if facebookMsg.userName.strip() != '空':
+            payload['username'] = facebookMsg.userName
+        if facebookMsg.userPwd.strip() != '空':
+            payload['password'] = facebookMsg.userPwd
+
+        response = requests.post(URL_CREATE_USER, json=payload)
+        data = response.json()
+        if response.status_code == 200:
+            return data
+        else:
+            print("creatFacebookUser err")
+            return None
+
+    @staticmethod
+    def getAccounts(page: int, group_id: str = None, user_id: str = None):
         if HttpUtils._debug:
             json_str = '''
                 {
@@ -242,10 +290,10 @@ class HttpUtils:
             # 解析JSON字符串
             json_obj = json.loads(json_str)
             return json_obj
-        if user_id == None:  
-          response = requests.get(URL_ACCOUNT_LIST, params={'page_size': 6, 'group_id': group_id, 'page': page})
+        if user_id == None:
+            response = requests.get(URL_ACCOUNT_LIST, params={'page_size': 6, 'group_id': group_id, 'page': page})
         else:
-          response = requests.get(URL_ACCOUNT_LIST, params={'page_size': 1, 'user_id': user_id, 'page': page})
+            response = requests.get(URL_ACCOUNT_LIST, params={'page_size': 1, 'user_id': user_id, 'page': page})
         data = response.json()
         if response.status_code == 200:
             return data

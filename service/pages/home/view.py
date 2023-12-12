@@ -19,7 +19,7 @@ class HomePage(ft.UserControl):
                 [
                     AccountList(self.parent),
                     ft.ElevatedButton(text="测试按钮1",
-                                      on_click=lambda _: self.test01()),
+                                      on_click=lambda _: self.todo()),
                     AutomationArea(self.parent),
                     QuickWebsite(self.parent),
                     QuickDirFile(self.parent),
@@ -30,6 +30,5 @@ class HomePage(ft.UserControl):
             ),
         )
 
-    def test01(self):
-        CommonUtils.showAlertDialog(self.page, "你干嘛~~哎呦~~")
-        
+    def todo(self):
+        CommonUtils.showAlertDialog(self.page, "还没写呢,你干嘛~~哎呦~~")

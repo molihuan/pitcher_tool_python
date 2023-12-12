@@ -4,6 +4,7 @@ from flet_core import AppBar, Text, colors, ElevatedButton, ScrollMode
 
 from service.pages.home.view import HomePage
 from service.pages.home.widgets.home_popup_menuitems import HomePopupMenuItems
+from service.pages.quick_black_account.view import QuickBlackAccountPage
 from service.pages.quick_facebook_account.view import QuickFacebookAccountPage
 from service.utils.common_utils import CommonUtils
 
@@ -61,6 +62,16 @@ class AppRoutes():
                     [
                         AppBar(title=Text("速拿二解号"), bgcolor=colors.SURFACE_VARIANT),
                         QuickFacebookAccountPage(self.page)
+                    ],
+                )
+            )
+        elif self.page.route == "/quick_black_account":
+            self.page.views.append(
+                View(
+                    "/quick_black_account",
+                    [
+                        AppBar(title=Text("速拿大小黑"), bgcolor=colors.SURFACE_VARIANT),
+                        QuickBlackAccountPage(self.page)
                     ],
                 )
             )

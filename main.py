@@ -14,7 +14,7 @@ def main(page: Page):
     page.title = "几何专用"
     page.horizontal_alignment = CrossAxisAlignment.CENTER
 
-    # HttpUtils.setDebug(True)
+    HttpUtils.setDebug(True)
 
     DataManager.setPage(page)
 
@@ -26,7 +26,7 @@ def main(page: Page):
 
     # 启动服务器地址和端口
     server_address = (BaseHttpHandler.CLIENT_URL, BaseHttpHandler.CLIENT_PORT)
-    
+
     with socketserver.TCPServer(server_address, BaseHttpHandler) as httpd:
         print(f"服务器已启动，通过 http://127.0.0.1:{BaseHttpHandler.CLIENT_PORT} 访问")
         httpd.serve_forever()
