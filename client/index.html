@@ -104,6 +104,9 @@
                 </div>
                 <div class="layui-card-body">
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue"
+                            lay-on="openFacebookOriginalPanel">原始面板
+                    </button>
+                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue"
                             lay-on="openFacebookMainPage">Facebook主页
                     </button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue"
@@ -132,6 +135,9 @@
                     </button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue" lay-on="openCyberklick">
                         下户平台(Cyberklick)
+                    </button>
+                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue" lay-on="openAdLibrary">
+                        广告库
                     </button>
 
                 </div>
@@ -210,6 +216,27 @@
                     data: {
                         param1: '6666',
                         param2: 'param2'
+                    },
+                    success: function (response) {
+                        // 请求成功，处理响应数据
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // 请求失败
+                        console.log('Request failed. Status: ' + status + '. Error: ' + error);
+                    }
+                })
+
+            },
+            openFacebookOriginalPanel: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.browserId);
+
+                $.ajax({
+                    url: 'http://127.0.0.1:54111/quick_url',
+                    data: {
+                        'browserId': browserDebugConfig.browserId,
+                        'func': 'openFacebookOriginalPanel',
                     },
                     success: function (response) {
                         // 请求成功，处理响应数据
@@ -443,6 +470,27 @@
                     data: {
                         'browserId': browserDebugConfig.browserId,
                         'func': 'openCyberklick',
+                    },
+                    success: function (response) {
+                        // 请求成功，处理响应数据
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // 请求失败
+                        console.log('Request failed. Status: ' + status + '. Error: ' + error);
+                    }
+                })
+
+            },
+            openAdLibrary: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.browserId);
+
+                $.ajax({
+                    url: 'http://127.0.0.1:54111/quick_url',
+                    data: {
+                        'browserId': browserDebugConfig.browserId,
+                        'func': 'openAdLibrary',
                     },
                     success: function (response) {
                         // 请求成功，处理响应数据

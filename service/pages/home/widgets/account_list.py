@@ -10,6 +10,7 @@ from service.http.http import HttpUtils
 from service.models.browser_debug_config import BrowserDebugConfig
 from service.models.group_msg import GroupMsg
 from service.utils.common_utils import CommonUtils
+from service.utils.playwright_utils import PlaywrightUtils
 
 
 class AccountList(UserControl):
@@ -148,13 +149,19 @@ class AccountList(UserControl):
         status = HttpUtils.startupStatus(user_id)
         statusData = status['data']
         if (status['code'] != 0):
-            print('获取状态失败')
+            print('获取浏览器状态失败')
+            CommonUtils.showSnack(self.page, "获取浏览器状态失败")
             return
         if (statusData['status'] != 'Active'):
-            print('浏览器未打开')
+            print('浏览器未打开,请先打开')
+            CommonUtils.showSnack(self.page, "浏览器未打开,请先打开")
             return
         debugWsUrl = statusData['ws']['puppeteer']
-        CenterControlPanel.run(None, BrowserDebugConfig(debugWsUrl=debugWsUrl, browserId=user_id))
+
+        time.sleep(1.2)
+        facebookMsg = PlaywrightUtils.getFacebookAccountMsg(browserId=user_id)
+
+        CenterControlPanel.run(facebookMsg, BrowserDebugConfig(debugWsUrl=debugWsUrl, browserId=user_id))
         pass
 
     def handlePrePage(self, event):
@@ -209,6 +216,6 @@ class AccountList(UserControl):
 
     def handleRestartAccount(self, event, id):
         self.handleCloseAccount(event=event, user_id=id)
-        time.sleep(1.2)
+        time.sleep(3.0)
         self.handleOpenAccount(event=event, user_id=id)
         pass

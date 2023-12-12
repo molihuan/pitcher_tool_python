@@ -22,6 +22,18 @@ class QuickUrl():
             context = contexts[0]
             page = context.new_page()
             page.goto('https://www.facebook.com/')
+    # 原始面板
+    @staticmethod
+    def openFacebookOriginalPanel(browserId: str):
+        debugConfig = PlaywrightUtils.getBrowserDebugConfigMsg(browserId=browserId)
+
+        with sync_playwright() as playwright:
+            # 调试地址
+            browser = playwright.chromium.connect_over_cdp(endpoint_url=debugConfig.debugWsUrl)
+            contexts = browser.contexts
+            context = contexts[0]
+            page = context.new_page()
+            page.goto('https://start.adspower.net/')
 
     # 所有主页
     @staticmethod
@@ -149,3 +161,15 @@ class QuickUrl():
             context = contexts[0]
             page = context.new_page()
             page.goto('https://business.cyberklick.com.cn/')
+    # 广告库
+    @staticmethod
+    def openAdLibrary(browserId: str):
+        debugConfig = PlaywrightUtils.getBrowserDebugConfigMsg(browserId=browserId)
+
+        with sync_playwright() as playwright:
+            # 调试地址
+            browser = playwright.chromium.connect_over_cdp(endpoint_url=debugConfig.debugWsUrl)
+            contexts = browser.contexts
+            context = contexts[0]
+            page = context.new_page()
+            page.goto('https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=ALL&q=penis&search_type=keyword_unordered&media_type=all')
