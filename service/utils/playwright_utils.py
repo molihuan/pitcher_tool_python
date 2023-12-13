@@ -25,6 +25,10 @@ class PlaywrightUtils():
         print(firstAccount)
 
         facebookMsg = StrUtils.getFacebookAccountMsgByRemark(firstAccount['remark'])
+        # todo
+        if facebookMsg == None:
+            return None
+
         facebookMsg.userName = firstAccount['username']
         facebookMsg.userPwd = firstAccount['password']
 

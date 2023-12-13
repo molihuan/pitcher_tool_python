@@ -1,3 +1,4 @@
+import json
 from msilib.schema import tables
 from os import path
 import time
@@ -25,8 +26,13 @@ class CenterControlPanel():
             pages = context.pages
             # 切换到最后一个标签页
             page = pages[-1]
+            saveObj = {
+                "browserId":debugConfig.browserId,
+                "facebookMsg":facebookMsg.to_dict()
+                       }
+            
             # 设置LocalStorage浏览器id
-            page.evaluate('localStorage.setItem("browserDebugConfig", JSON.stringify({"browserId":"'+debugConfig.browserId+'"}))')
+            page.evaluate(f'localStorage.setItem("browserDebugConfig", JSON.stringify({saveObj}))')
 
             # 刷新页面以使修改生效
             page.reload()

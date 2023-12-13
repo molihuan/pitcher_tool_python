@@ -46,7 +46,9 @@ class StrUtils():
 
         msg_list = msg.split('\n')
         if len(msg_list) < 4:
-            print("解析可能有误")
+            print("备注信息不完整")
+            return None
+
         # id_card_img_url = msg_list[-2] if msg_list[-1] == "" else msg_list[-1]
         fm = FacebookAccountMsg(
             checkCode=msg_list[0],
