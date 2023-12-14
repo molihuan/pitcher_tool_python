@@ -12,6 +12,7 @@ class AutomationArea(ft.UserControl):
         self.btn_quick_account = Ref[ElevatedButton]()
         self.btn_quick_black_account = Ref[ElevatedButton]()
         self.btn_crawling_materials = Ref[ElevatedButton]()
+        self.btn_quick_video_cover = Ref[ElevatedButton]()
 
     def build(self):
 
@@ -44,6 +45,7 @@ class AutomationArea(ft.UserControl):
                         on_click=self.handle_onclick,
                     ),
                     ElevatedButton(
+                        ref=self.btn_quick_video_cover,
                         text="视频极速换封面",
                         col={"sm": 4},
                         on_click=self.handle_onclick,
@@ -76,6 +78,9 @@ class AutomationArea(ft.UserControl):
             pass
         elif viewText == self.btn_quick_black_account.current.text:
             self.parent.go("/quick_black_account")
+            pass
+        elif viewText == self.btn_quick_video_cover.current.text:
+            self.parent.go("/quick_video_cover")
             pass
         elif viewText == self.btn_crawling_materials.current.text:
             CommonUtils.showAlertDialog(self.page, "还没写呢,你干嘛~~哎呦~~")

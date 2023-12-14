@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>超级投手中控面板</title>
+    <title>投手中控面板</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +11,7 @@
 <body>
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo layui-hide-xs layui-bg-black">超级投手中控面板</div>
+        <div class="layui-logo layui-hide-xs layui-bg-black">投手中控面板</div>
         <!-- 头部区域（可配合layui 已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
             <!-- 移动端显示 -->
@@ -162,7 +162,7 @@
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">自动填写开户信息</button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">自动登记消费</button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">自动上广告</button>
-                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">下载身份证图片</button>
+                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue" lay-on="downloadIdCard">下载身份证图片</button>
                 </div>
             </div>
             <br><br>
@@ -185,8 +185,15 @@
             layer.msg('复制成功!', {icon: 1});
         }, function (err) {
             console.error('无法复制文本到剪贴板', err);
-            layer.msg('复制成功!', {icon: 2});
+            layer.msg('复制失败!', {icon: 2});
         });
+    }
+
+    function downloadImage(imgUrl) {
+        var link = document.createElement('a');
+        link.href = imgUrl; // 替换为你的图片路径
+        link.download = 'IdCard.jpg'; // 指定下载文件的文件名
+        link.click();
     }
 
 
@@ -230,10 +237,12 @@
                     success: function (response) {
                         // 请求成功，处理响应数据
                         console.log(response);
+                        layer.msg('复制成功!30秒后过期,请尽快使用', {icon: 1});
                     },
                     error: function (xhr, status, error) {
                         // 请求失败
                         console.log('Request failed. Status: ' + status + '. Error: ' + error);
+                        layer.msg('复制失败!', {icon: 2});
                     }
                 })
             },
@@ -569,6 +578,12 @@
                     }
                 })
 
+            },
+
+            downloadIdCard: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.facebookMsg.idCardImgUrl);
+                downloadImage(browserDebugConfig.facebookMsg.idCardImgUrl)
             },
 
 

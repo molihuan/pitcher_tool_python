@@ -6,6 +6,7 @@ from service.pages.home.view import HomePage
 from service.pages.home.widgets.home_popup_menuitems import HomePopupMenuItems
 from service.pages.quick_black_account.view import QuickBlackAccountPage
 from service.pages.quick_facebook_account.view import QuickFacebookAccountPage
+from service.pages.quick_video_cover.view import QuickVideoCoverPage
 from service.utils.common_utils import CommonUtils
 
 
@@ -34,7 +35,7 @@ class AppRoutes():
                 appbar=ft.AppBar(
                     # leading=ft.Image(src=f"/imgs/ml.png"),
                     # leading_width=40,
-                    title=ft.Text("超级投手工具"),
+                    title=ft.Text("投手工具"),
                     center_title=False,
                     bgcolor=ft.colors.SURFACE_VARIANT,
                     actions=[
@@ -72,6 +73,17 @@ class AppRoutes():
                     [
                         AppBar(title=Text("速拿大小黑"), bgcolor=colors.SURFACE_VARIANT),
                         QuickBlackAccountPage(self.page)
+                    ],
+                )
+            )
+            pass
+        elif self.page.route == "/quick_video_cover":
+            self.page.views.append(
+                View(
+                    "/quick_video_cover",
+                    [
+                        AppBar(title=Text("视频极速换封面"), bgcolor=colors.SURFACE_VARIANT),
+                        QuickVideoCoverPage(self.page)
                     ],
                 )
             )

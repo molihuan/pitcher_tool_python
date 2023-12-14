@@ -16,3 +16,5 @@ x自动化:selenium 4
 
 打包:pyinstaller 和 nuitka
 
+视频处理:moviepy
+
