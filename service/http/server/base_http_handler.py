@@ -1,6 +1,7 @@
 from http.server import BaseHTTPRequestHandler, SimpleHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 from service.automation.playwright.browser.browser_automation import BrowserAutomation
+from service.automation.playwright.browser.quick_msg import QuickMsg
 from service.automation.playwright.browser.quick_url import QuickUrl
 
 from service.automation.playwright.login_consume_report import LogonConsumeReport
@@ -35,14 +36,35 @@ class BaseHttpHandler(SimpleHTTPRequestHandler):
             ret = ResponseBody.success_json_encode('服务器正常!')
             self.wfile.write(ret)
 
-        #快速网址
+        # 信息展示
+        elif self.path.startswith('/quick_msg?'):
+            self.send_response(200)
+
+            url_parts = urlparse(self.path)
+            query_params = parse_qs(url_parts.query)
+            browserId = query_params['browserId'][0]
+            func = query_params['func'][0]
+            print(browserId)
+            print(func)
+            # 根据方法名调用方法注意参数
+            qu = QuickMsg()
+            method = getattr(qu, func)
+            method(browserId)
+
+            self.send_header('Access-Control-Allow-Origin', '*')  # 允许任何来源的跨域请求
+            self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')  # 允许跨域请求的方法
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            ret = ResponseBody.success_json_encode('服务器正常!')
+            self.wfile.write(ret)
+        # 快速网址
         elif self.path.startswith('/quick_url?'):
             self.send_response(200)
 
             url_parts = urlparse(self.path)
             query_params = parse_qs(url_parts.query)
-            browserId=query_params['browserId'][0]
-            func=query_params['func'][0]
+            browserId = query_params['browserId'][0]
+            func = query_params['func'][0]
             print(browserId)
             print(func)
             # 根据方法名调用方法注意参数
@@ -57,14 +79,14 @@ class BaseHttpHandler(SimpleHTTPRequestHandler):
             ret = ResponseBody.success_json_encode('服务器正常!')
             self.wfile.write(ret)
 
-        #自动化
+        # 自动化
         elif self.path.startswith('/automation?'):
             self.send_response(200)
-            
+
             url_parts = urlparse(self.path)
             query_params = parse_qs(url_parts.query)
-            browserId=query_params['browserId'][0]
-            func=query_params['func'][0]
+            browserId = query_params['browserId'][0]
+            func = query_params['func'][0]
             print(browserId)
             print(func)
             # 根据方法名调用方法注意参数

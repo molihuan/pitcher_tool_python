@@ -38,6 +38,31 @@ class AutomationArea(ft.UserControl):
                         col={"sm": 4},
                         on_click=self.handle_onclick,
                     ),
+                    ElevatedButton(
+                        text="图片转视频",
+                        col={"sm": 4},
+                        on_click=self.handle_onclick,
+                    ),
+                    ElevatedButton(
+                        text="视频极速换封面",
+                        col={"sm": 4},
+                        on_click=self.handle_onclick,
+                    ),
+                    ElevatedButton(
+                        text="视频快速滤镜",
+                        col={"sm": 4},
+                        on_click=self.handle_onclick,
+                    ),
+                    ElevatedButton(
+                        text="图片微调",
+                        col={"sm": 4},
+                        on_click=self.handle_onclick,
+                    ),
+                    ElevatedButton(
+                        text="图片快速滤镜",
+                        col={"sm": 4},
+                        on_click=self.handle_onclick,
+                    ),
                 ], alignment=ft.MainAxisAlignment.CENTER)
             ])
         )

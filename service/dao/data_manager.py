@@ -9,12 +9,12 @@ class DataManager():
         DataManager.page = page
 
     @staticmethod
-    def setGroupMsg(page: Page, value):
-        return page.client_storage.set("MLH_GroupMsg", value)
+    def setGroupMsg(value):
+        return DataManager.page.client_storage.set("MLH_GroupMsg", value)
 
     @staticmethod
-    def getGroupMsg(page: Page):
-        groupMsgDirt = page.client_storage.get("MLH_GroupMsg")
+    def getGroupMsg():
+        groupMsgDirt = DataManager.page.client_storage.get("MLH_GroupMsg")
         return groupMsgDirt
 
     @staticmethod

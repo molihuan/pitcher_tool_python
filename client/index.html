@@ -81,16 +81,16 @@
                 </div>
                 <div class="layui-card-body">
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue"
-                            lay-on="">2FA码
+                            lay-on="copy2fa">2FA码
                     </button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue"
-                            lay-on="">邮箱
+                            lay-on="copyEmail">邮箱
                     </button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue"
-                            lay-on="">邮箱密码
+                            lay-on="copyEmailPwd">邮箱密码
                     </button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue"
-                            lay-on="">身份证图片地址
+                            lay-on="copyIdCardImgUrl">身份证图片地址
                     </button>
 
                 </div>
@@ -161,10 +161,6 @@
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">自动替换主页‘茶’背景和头像</button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">自动填写开户信息</button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">自动登记消费</button>
-                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">视频极速换封面</button>
-                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">视频快速滤镜</button>
-                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">图片微调</button>
-                    <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">图片快速滤镜</button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">自动上广告</button>
                     <button type="button" style="margin: 8px 0" class="layui-btn layui-bg-blue">下载身份证图片</button>
                 </div>
@@ -182,6 +178,18 @@
 <!--<script src="plugs/axios1.6.2/axios.js"></script>-->
 
 <script>
+    // 复制文本到粘贴板
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function () {
+            console.log('文本已成功复制到剪贴板');
+            layer.msg('复制成功!', {icon: 1});
+        }, function (err) {
+            console.error('无法复制文本到剪贴板', err);
+            layer.msg('复制成功!', {icon: 2});
+        });
+    }
+
+
     //JS
     layui.use(['element', 'layer', 'util'], function () {
         var element = layui.element;
@@ -209,13 +217,15 @@
 
         util.on('lay-on', {
 
-            alert: function () {
+            copy2fa: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.browserId);
 
                 $.ajax({
-                    url: 'http://127.0.0.1:54111/automation',
+                    url: 'http://127.0.0.1:54111/quick_msg',
                     data: {
-                        param1: '6666',
-                        param2: 'param2'
+                        'browserId': browserDebugConfig.browserId,
+                        'func': 'copy2fa',
                     },
                     success: function (response) {
                         // 请求成功，处理响应数据
@@ -226,8 +236,43 @@
                         console.log('Request failed. Status: ' + status + '. Error: ' + error);
                     }
                 })
+            },
+
+            // const data = {
+            //     browserId: "jc20alk",
+            //     facebookMsg: {
+            //         userName: "100009830718895",
+            //         userPwd: "D1963RsjeVcf",
+            //         checkCode: "KBN6CH4PS7OPPS3AZPP3HNHC7LDVKFOB",
+            //         email: "riebujx697115@hotmail.com",
+            //         emailPwd: "nM73jaVAT",
+            //         idCardImgUrl: "http://103.195.238.151/IMG/100009830718895.jpg"
+            //     }
+            // };
+            // // 将数据转换为 JSON 字符串
+            // const jsonString = JSON.stringify(data);
+            // // 使用 localStorage 存储数据
+            // localStorage.setItem("browserDebugConfig", jsonString);
+
+            copyEmail: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.facebookMsg.email);
+                copyToClipboard(browserDebugConfig.facebookMsg.email)
 
             },
+
+            copyEmailPwd: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.facebookMsg.emailPwd);
+                copyToClipboard(browserDebugConfig.facebookMsg.emailPwd)
+            },
+
+            copyIdCardImgUrl: function () {
+                var browserDebugConfig = layui.data('browserDebugConfig');
+                console.log(browserDebugConfig.facebookMsg.idCardImgUrl);
+                copyToClipboard(browserDebugConfig.facebookMsg.idCardImgUrl)
+            },
+
             openFacebookOriginalPanel: function () {
                 var browserDebugConfig = layui.data('browserDebugConfig');
                 console.log(browserDebugConfig.browserId);

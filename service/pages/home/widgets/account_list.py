@@ -24,7 +24,7 @@ class AccountList(UserControl):
         self.showGroupBtn = Ref[OutlinedButton]()
 
     def initData(self):
-        dataJson = DataManager.getGroupMsg(self.page)
+        dataJson = DataManager.getGroupMsg()
         if dataJson is None:
             return
         self.selectedGroupMsg = GroupMsg.from_json(dataJson)
@@ -58,7 +58,7 @@ class AccountList(UserControl):
     def clcGroupItem(self, event: ControlEvent, groupMsg: GroupMsg):
         CommonUtils.closeBottomSheet(self.page, self.bs)
         # 持久化
-        saveResult = DataManager.setGroupMsg(self.page, groupMsg.to_json())
+        saveResult = DataManager.setGroupMsg(groupMsg.to_json())
         self.selectedGroupMsg = groupMsg
         if not saveResult:
             print('保存失败,请联系开发者解决')

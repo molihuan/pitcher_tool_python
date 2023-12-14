@@ -27,10 +27,10 @@ class CenterControlPanel():
             # 切换到最后一个标签页
             page = pages[-1]
             saveObj = {
-                "browserId":debugConfig.browserId,
-                "facebookMsg":facebookMsg.to_dict()
-                       }
-            
+                "browserId": debugConfig.browserId,
+                "facebookMsg": facebookMsg.to_dict()
+            }
+
             # 设置LocalStorage浏览器id
             page.evaluate(f'localStorage.setItem("browserDebugConfig", JSON.stringify({saveObj}))')
 
