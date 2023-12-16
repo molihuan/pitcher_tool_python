@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess
 import platform
 
@@ -7,6 +8,28 @@ class FileUtils():
     @staticmethod
     def exists(path: str) -> bool:
         return os.path.exists(path)
+
+    @staticmethod
+    def getDirAvailablePath(file_path):
+        folder_path = os.path.dirname(file_path)  # 获取文件夹路径
+        filename, ext = os.path.splitext(os.path.basename(file_path))  # 获取文件名和扩展名
+
+        # 判断文件是否存在
+        if not os.path.exists(file_path):
+            return file_path
+
+        file_num = 0
+        while True:
+            file_num += 1
+            if file_num == 1:
+                new_filename = "{}(1){}".format(filename, ext)
+            else:
+                new_filename = re.sub(r'\(\d+\)', '({})'.format(file_num), filename) + ext
+
+            new_file_path = os.path.join(folder_path, new_filename)
+
+            if not os.path.exists(new_file_path):
+                return new_file_path
 
     @staticmethod
     def getAssetsPath():

@@ -1,19 +1,11 @@
 import time
+from os import path
+
 from flet_core import UserControl, Page, Container, Column, ElevatedButton, ScrollMode, MainAxisAlignment, AppBar, Text, \
     colors, alignment, TextField, Row, ListTile, ControlEvent, Ref, Switch, FilePicker, FilePickerResultEvent
 
-from service.automation.playwright.browser.quick_url import QuickUrl
-from service.automation.playwright.center_control_panel import CenterControlPanel
-from service.automation.playwright.login_outlook import LoginOutlook
-from service.automation.playwright.logon_facebook import LogonFacebook
-from service.dao.data_manager import DataManager
-
-from service.http.http import HttpUtils
-from service.models.browser_debug_config import BrowserDebugConfig
-from service.models.facebook_account_msg import FacebookAccountMsg
-from service.models.group_msg import GroupMsg
-from service.utils.common_utils import CommonUtils
-from service.utils.str_utils import StrUtils
+from service.utils.ffmpeg_utils import FFmpegUtils
+from service.utils.file_utils import FileUtils
 
 
 class QuickVideoCoverPage(UserControl):
@@ -24,6 +16,9 @@ class QuickVideoCoverPage(UserControl):
         self.btn_select_img_path = Ref[ElevatedButton]()
         self.tf_select_video_path = Ref[TextField]()
         self.tf_select_img_path = Ref[TextField]()
+
+        self.btn_run_ffmpeg = Ref[ElevatedButton]()
+
         self.btn_select_path_type = self.btn_select_video_path
 
     def initData(self):
@@ -72,6 +67,14 @@ class QuickVideoCoverPage(UserControl):
             self.btn_select_path_type = self.btn_select_img_path
             self.file_picker.pick_files(dialog_title='选择封面', allow_multiple=False)
             pass
+        elif viewText == self.btn_run_ffmpeg.current.text:
+            ffmpegExec = path.join(FileUtils.getAssetsPath(), 'ffmpeg\\ffmpeg.exe')
+            FFmpegUtils.setFFmpegExecutPath(ffmpegExec)
+            FFmpegUtils.changeCover(self.tf_select_video_path.current.value,
+                                    self.tf_select_img_path.current.value,
+                                    1000, 2,
+                                    FileUtils.getDirAvailablePath(self.tf_select_video_path.current.value))
+            pass
         else:
             print("click err")
             pass
@@ -87,7 +90,7 @@ class QuickVideoCoverPage(UserControl):
                     TextField(ref=self.tf_select_img_path, label='封面路径'),
                     ElevatedButton(ref=self.btn_select_img_path, text='选择封面', on_click=self.btn_click)
                 ]),
-                ElevatedButton(text='执行')
+                ElevatedButton(ref=self.btn_run_ffmpeg, text='执行', on_click=self.btn_click)
             ],
                 scroll=ScrollMode.ALWAYS,
                 alignment=MainAxisAlignment.CENTER
