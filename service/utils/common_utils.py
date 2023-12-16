@@ -5,6 +5,9 @@ from flet_core import MainAxisAlignment, Control, Text
 
 
 class CommonUtils():
+
+    
+
     @staticmethod
     def showSnack(page: ft.Page, text: str, actionText='提示'):
         if page.snack_bar is None:

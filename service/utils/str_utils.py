@@ -4,6 +4,11 @@ from service.models.facebook_account_msg import FacebookAccountMsg
 
 
 class StrUtils():
+
+    @staticmethod
+    def has_whitespace(text: str) -> bool:
+        return any(char.isspace() for char in text)
+    
     @staticmethod
     def getFacebookAccountMsg(msg: str) -> FacebookAccountMsg:
         print(msg)

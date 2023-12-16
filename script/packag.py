@@ -69,7 +69,7 @@ def Ppkg(sysType):
         # 前面的顺序不要动
         # '--add-binary', f'{ffmpegExePath}:{ffmpegPackageDir}',  # 将ffmpeg文件夹复制到指定目录
         # '--onefile',  # 打包成一个单独的可执行文件
-        # '--noconsole',  # 不显示控制台窗口
+        '--noconsole',  # 不显示控制台窗口
         '--clean',
         '--distpath', outputDir
     ]

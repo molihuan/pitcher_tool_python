@@ -3,9 +3,11 @@ from os import path
 
 from flet_core import UserControl, Page, Container, Column, ElevatedButton, ScrollMode, MainAxisAlignment, AppBar, Text, \
     colors, alignment, TextField, Row, ListTile, ControlEvent, Ref, Switch, FilePicker, FilePickerResultEvent
+from service.utils.common_utils import CommonUtils
 
 from service.utils.ffmpeg_utils import FFmpegUtils
 from service.utils.file_utils import FileUtils
+from service.utils.str_utils import StrUtils
 
 
 class QuickVideoCoverPage(UserControl):
@@ -69,11 +71,36 @@ class QuickVideoCoverPage(UserControl):
             pass
         elif viewText == self.btn_run_ffmpeg.current.text:
             ffmpegExec = path.join(FileUtils.getAssetsPath(), 'ffmpeg\\ffmpeg.exe')
+            #检查是否存在空格
+            videoPath = self.tf_select_video_path.current.value
+            imgPath = self.tf_select_img_path.current.value
+
+            if StrUtils.has_whitespace(ffmpegExec):
+                temp = f"ffmpeg 路径中存在空格:{ffmpegExec}"
+                print(temp)
+                CommonUtils.showSnack(self.page,temp)
+                return
+            if StrUtils.has_whitespace(videoPath):
+                temp =f"视频路径中存在空格:{videoPath}"
+                print(temp)
+                CommonUtils.showSnack(self.page,temp)
+                return
+            if StrUtils.has_whitespace(imgPath):
+                temp =f"封面路径中存在空格:{imgPath}"
+                print(temp)
+                CommonUtils.showSnack(self.page,temp)
+                return
+            outputVideoPath = FileUtils.getDirAvailablePath(self.tf_select_video_path.current.value)
+
             FFmpegUtils.setFFmpegExecutPath(ffmpegExec)
-            FFmpegUtils.changeCover(self.tf_select_video_path.current.value,
-                                    self.tf_select_img_path.current.value,
+            ress=FFmpegUtils.changeCover(videoPath,
+                                    imgPath,
                                     1000, 2,
-                                    FileUtils.getDirAvailablePath(self.tf_select_video_path.current.value))
+                                    outputVideoPath)
+            if ress:
+                CommonUtils.showSnack(self.page,f'处理成功,文件保存在:{outputVideoPath}')
+            else:
+                CommonUtils.showSnack(self.page,f'处理失败,未知错误')
             pass
         else:
             print("click err")
