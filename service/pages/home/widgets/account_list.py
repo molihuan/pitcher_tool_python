@@ -216,6 +216,6 @@ class AccountList(UserControl):
 
     def handleRestartAccount(self, event, id):
         self.handleCloseAccount(event=event, user_id=id)
-        time.sleep(3.0)
+        time.sleep(4.0)
         self.handleOpenAccount(event=event, user_id=id)
         pass
