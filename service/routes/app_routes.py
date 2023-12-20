@@ -1,7 +1,10 @@
+import socket
+
 from flet import View, Page
 import flet as ft
 from flet_core import AppBar, Text, colors, ElevatedButton, ScrollMode
 
+from service.http.http import HttpUtils
 from service.pages.home.view import HomePage
 from service.pages.home.widgets.home_popup_menuitems import HomePopupMenuItems
 from service.pages.quick_black_account.view import QuickBlackAccountPage
@@ -23,6 +26,7 @@ class AppRoutes():
 
     def route_change(self, route):
         self.page.views.clear()
+        wlan_ip = HttpUtils.get_local_ipv4_address(socket.AF_INET)
 
         # 默认页面
         self.page.views.append(
@@ -35,7 +39,7 @@ class AppRoutes():
                 appbar=ft.AppBar(
                     # leading=ft.Image(src=f"/imgs/ml.png"),
                     # leading_width=40,
-                    title=ft.Text("投手工具"),
+                    title=ft.Text(f"投手工具({wlan_ip})"),
                     center_title=False,
                     bgcolor=ft.colors.SURFACE_VARIANT,
                     actions=[

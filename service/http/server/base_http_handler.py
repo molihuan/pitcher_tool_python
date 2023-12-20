@@ -1,10 +1,14 @@
 from http.server import BaseHTTPRequestHandler, SimpleHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
+
+import requests
+
 from service.automation.playwright.browser.browser_automation import BrowserAutomation
 from service.automation.playwright.browser.quick_msg import QuickMsg
 from service.automation.playwright.browser.quick_url import QuickUrl
 
 from service.automation.playwright.login_consume_report import LogonConsumeReport
+from service.http.api import URL_BASE_AD_API
 from service.http.server.response_body import ResponseBody
 
 
@@ -27,6 +31,24 @@ class BaseHttpHandler(SimpleHTTPRequestHandler):
             self.path = '/info'
             self.do_GET()
             pass
+        elif self.path.startswith('/adinterface/'):
+            self.send_response(200)
+            self.send_header('Access-Control-Allow-Origin', '*')  # 允许任何来源的跨域请求
+            self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')  # 允许跨域请求的方法
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+
+            fullURL = self.path.replace('/adinterface', URL_BASE_AD_API)
+            response = requests.get(fullURL)
+            data = response.json()
+
+            if response.status_code == 200:
+                ret = data
+            else:
+                ret = ResponseBody.error_json_encode('转发请求失败')
+
+            self.wfile.write(ret)
+
         elif self.path == '/info':
             self.send_response(200)
             self.send_header('Access-Control-Allow-Origin', '*')  # 允许任何来源的跨域请求
@@ -100,9 +122,35 @@ class BaseHttpHandler(SimpleHTTPRequestHandler):
             self.end_headers()
             ret = ResponseBody.success_json_encode('服务器正常!')
             self.wfile.write(ret)
+
         else:
             self.send_error(404, 'Not found')
         print('do_GET end')
+
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length).decode('utf-8')
+
+        print(post_data)
+
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')  # 允许任何来源的跨域请求
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')  # 允许跨域请求的方法
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+
+        fullURL = self.path.replace('/adinterface', URL_BASE_AD_API)
+        response = requests.post(fullURL, json=post_data)
+        data = response.json()
+
+        if response.status_code == 200:
+            ret = data
+        else:
+            ret = ResponseBody.error_json_encode('转发请求失败')
+
+        self.wfile.write(ret)
+
+        pass
 
     def end_headers(self):
         # self.send_header('Access-Control-Allow-Origin', '*')  # 允许任何来源的跨域请求

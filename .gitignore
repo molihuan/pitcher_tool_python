@@ -7,3 +7,5 @@ temp/
 !/script/packag.py
 /build
 /dist
+SuperPitcherv*
+test_*

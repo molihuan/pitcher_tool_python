@@ -1,4 +1,5 @@
 import json
+import socket
 
 import requests
 
@@ -13,6 +14,24 @@ class HttpUtils:
     @classmethod
     def setDebug(cls, v):
         cls._debug = v
+
+    @staticmethod
+    def get_local_ipv4_address(adapter_type):
+        adapters = socket.getaddrinfo(socket.gethostname(), None)
+        for adapter in adapters:
+            _, _, _, _, sockaddr = adapter
+            ip_address, *_ = sockaddr
+            if adapter_type == socket.AF_INET:
+                if ':' not in ip_address:
+                    return ip_address
+            elif adapter_type == socket.AF_INET6:
+                if ':' in ip_address:
+                    return ip_address
+        return None
+
+    @staticmethod
+    def get_local_hostname():
+        return socket.gethostname()
 
     @staticmethod
     def getApiStatus():
